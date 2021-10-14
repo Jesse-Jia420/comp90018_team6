@@ -26,7 +26,7 @@
             android:fontFamily="serif"
             android:padding="10dp"
             android:textSize="18sp"
-            android:text="All My Friends"
+            android:text="Share My Location With"
             android:textColor="@android:color/white" />
 
         <ImageView
@@ -45,7 +45,7 @@
         <ListView
             android:id="@+id/myFriendList"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
     </LinearLayout>
 
 </LinearLayout>

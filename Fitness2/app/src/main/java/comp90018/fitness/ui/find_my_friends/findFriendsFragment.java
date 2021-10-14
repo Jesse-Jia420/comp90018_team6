@@ -6,6 +6,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
 
@@ -92,7 +94,9 @@ public class findFriendsFragment extends Fragment implements OnMapReadyCallback 
         ListView l;
         ArrayList<String> people = new ArrayList<>();
         for (int i=1; i<11; i++){
-            people.add("Person " + String.valueOf(i));
+            people.add("       Person " + String.valueOf(i) +
+                    "                                               " +
+                    "10.5km ");
         }
         l = view.findViewById(R.id.availableFriendList);
         ArrayAdapter<String> arr;
@@ -101,7 +105,6 @@ public class findFriendsFragment extends Fragment implements OnMapReadyCallback 
         l.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("hahaha", parent.getItemAtPosition(position).toString());
             }
         });
     }
@@ -123,7 +126,29 @@ public class findFriendsFragment extends Fragment implements OnMapReadyCallback 
         l.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("hahaha", parent.getItemAtPosition(position).toString());
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("Are you sure to share location with " +
+                        parent.getItemAtPosition(position).toString() + " ?");
+                builder.setCancelable(true);
+
+                builder.setPositiveButton(
+                        "Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                builder.setNegativeButton(
+                        "No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
 
