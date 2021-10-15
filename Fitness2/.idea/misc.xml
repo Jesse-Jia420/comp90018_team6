@@ -6,6 +6,7 @@
         <entry key="app/src/main/res/drawable/ic_baseline_cloud_download_24.xml" value="0.15364583333333334" />
         <entry key="app/src/main/res/drawable/ic_baseline_expand_less_24.xml" value="0.15364583333333334" />
         <entry key="app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.15885416666666666" />
+        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.17395833333333333" />
         <entry key="app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.15364583333333334" />
         <entry key="app/src/main/res/drawable/side_nav_bar.xml" value="0.15364583333333334" />
         <entry key="app/src/main/res/layout/activity_find_friend.xml" value="0.18840579710144928" />
@@ -15,7 +16,7 @@
         <entry key="app/src/main/res/layout/content_main.xml" value="0.15729166666666666" />
         <entry key="app/src/main/res/layout/find_friends_bottom_sheet.xml" value="0.1375" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.14270833333333333" />
-        <entry key="app/src/main/res/layout/fragment_find_friends.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_find_friends.xml" value="0.11" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.14270833333333333" />
         <entry key="app/src/main/res/layout/fragment_item_list_dialog_list_dialog.xml" value="0.21784420289855072" />
         <entry key="app/src/main/res/layout/fragment_item_list_dialog_list_dialog_item.xml" value="0.21784420289855072" />
@@ -24,6 +25,7 @@
         <entry key="app/src/main/res/layout/fragment_slideshow.xml" value="0.15729166666666666" />
         <entry key="app/src/main/res/layout/fragment_training_records.xml" value="0.14270833333333333" />
         <entry key="app/src/main/res/layout/fragment_training_records1.xml" value="0.14270833333333333" />
+        <entry key="app/src/main/res/layout/friend_list_row_item.xml" value="0.26832276414566913" />
         <entry key="app/src/main/res/layout/share_location_bottom_sheet.xml" value="0.2667572463768116" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.42160027909831316" />
       </map>

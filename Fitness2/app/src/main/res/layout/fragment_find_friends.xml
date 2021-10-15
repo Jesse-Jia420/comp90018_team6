@@ -57,13 +57,13 @@
         android:layout_width="match_parent"
         android:layout_height="405dp"
         app:layout_constraintTop_toTopOf="parent"
-        tools:context=".ui.find_my_friends.findFriendsFragment"
+        tools:context=".ui.find_my_friends.FindFriendsFragment"
         tools:layout_editor_absoluteX="129dp" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="500dp"
-        android:layout_marginTop="196dp"
+        android:layout_marginTop="48dp"
         app:layout_constraintTop_toTopOf="@+id/map"
         tools:layout_editor_absoluteX="0dp">
 
