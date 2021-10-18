@@ -15,16 +15,16 @@ import comp90018.fitness.R;
 public class CustomFriendList extends ArrayAdapter {
     private ArrayList<String> names;
     private ArrayList<String> distances;
-    private ArrayList<Integer> imageid;
+    private ArrayList<Integer> imageId;
     private Activity context;
 
     public CustomFriendList(Activity context, ArrayList<String> names, ArrayList<String> distances,
-                            ArrayList<Integer> imageid) {
+                            ArrayList<Integer> imageId) {
         super(context, R.layout.friend_list_row_item, names);
         this.context = context;
         this.names = names;
         this.distances = distances;
-        this.imageid = imageid;
+        this.imageId = imageId;
 
     }
 
@@ -42,7 +42,7 @@ public class CustomFriendList extends ArrayAdapter {
         if (distances != null){
             distance.setText(distances.get(position));
         }
-        avatar.setImageResource(imageid.get(position));
+        avatar.setImageResource(imageId.get(position));
         return  row;
     }
 }

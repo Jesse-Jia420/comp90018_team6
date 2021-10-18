@@ -33,11 +33,18 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import comp90018.fitness.R;
 
@@ -50,6 +57,16 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
     private Marker marker;
+    private Marker friendMarker;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private String TAG = this.getClass().getSimpleName();
+    private ArrayList<String> AllNames = new ArrayList<>();
+    private ArrayList<Integer> AllImageIds = new ArrayList<>();
+    private ArrayList<String> names = new ArrayList<>();
+    private ArrayList<String> distances = new ArrayList<>();
+    private ArrayList<Integer> imageIds = new ArrayList<>();
+    private ArrayList<Map<String, Object>> friends = new ArrayList<>();
+    private CustomFriendList customFriendList;
 
     @Nullable
     @Override
@@ -60,6 +77,14 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
 //        startActivity(intent);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         fetchLocation();
+
+//        for (int i=1; i<3; i++){
+//            names.add("");
+//            distances.add("");
+//            imageid.add(R.drawable.ic_baseline_account_circle_24);
+//        }
+
+
         return inflater.inflate(R.layout.fragment_find_friends, container, false);
     }
 
@@ -71,20 +96,43 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
 //        if (mapFragment != null) {
 //            mapFragment.getMapAsync(MapFragment.this);
 //        }
-        ArrayList<String> names = new ArrayList<>();
-        ArrayList<String> distances = new ArrayList<>();
-        ArrayList<Integer> imageid = new ArrayList<>();
-        for (int i=1; i<21; i++){
-            names.add("Person " + String.valueOf(i));
-            distances.add("10.5km");
-            imageid.add(R.drawable.ic_baseline_account_circle_24);
-        }
+
+
+        // Create a new user with a first and last name
+//        Map<String, Object> user = new HashMap<>();
+//        Map<String, Object> friend = new HashMap<>();
+//        ArrayList<Map<String, Object>> friends = new ArrayList<>();
+//        friend.put("name", "Bob");
+//        friend.put("lat", -37.816178);
+//        friend.put("long", 145.015345);
+//        friends.add(friend);
+//        user.put("name", "Ada");
+//        user.put("friends", friends);
+
+        // Add a new document with a generated ID
+//        db.collection("users")
+//                .add(user)
+//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                    @Override
+//                    public void onSuccess(DocumentReference documentReference) {
+//                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.w(TAG, "Error adding document", e);
+//                    }
+//                });
 
         Button LocateButton = (Button) view.findViewById(R.id.locate);
         LocateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateLocation(map);
+                updateLocation();
+                updateFriends();
+                customFriendList.notifyDataSetChanged();
+
             }
         });
 
@@ -92,37 +140,110 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                shareLocationDialog(view, names, imageid);
+                shareLocationDialog(view);
             }
         });
 
-        ListView l;
-        CustomFriendList customFriendList = new CustomFriendList(getActivity(), names, distances, imageid);
-        l = view.findViewById(R.id.availableFriendList);
-//        ArrayAdapter<String> arr;
-//        arr = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, names);
-        l.setAdapter(customFriendList);
-        l.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        DocumentReference docRef = db.collection("users").document("Rve0AFkG4XjQtGhJmQkV");
+        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+
+                if (snapshot != null && snapshot.exists()) {
+                    Log.d(TAG, "Current data: " + snapshot.getData().get("friends"));
+                    friends = (ArrayList<Map<String, Object>>) snapshot.getData().get("friends");
+                    updateFriends();
+                    ListView l;
+                    customFriendList = new CustomFriendList(getActivity(), names, distances, imageIds);
+                    l = view.findViewById(R.id.availableFriendList);
+//                        ArrayAdapter<String> arr;
+//                        arr = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, names);
+                    l.setAdapter(customFriendList);
+                    l.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            LatLng latLng = new LatLng((Double) friends.get(position).get("lat"), (Double) friends.get(position).get("long"));
+
+                            if (friendMarker == null) {
+                                MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("Your friend is here!");
+                                friendMarker = map.addMarker(markerOptions);
+                            }
+                            map.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                            map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
+                            friendMarker.setPosition(latLng);
+                        }
+                    });
+                } else {
+                    Log.d(TAG, "Current data: null");
+                }
+            }
+        });
+
+    }
+
+    private void updateFriends(){
+        names.clear();
+        distances.clear();
+        imageIds.clear();
+        AllNames.clear();
+        AllImageIds.clear();
+        for (int i = 0; i<friends.size(); i++) {
+            AllNames.add((String) friends.get(i).get("name"));
+            AllImageIds.add(R.drawable.ic_baseline_account_circle_24);
+            if (friends.get(i).get("lat") != null && friends.get(i).get("long") != null){
+                names.add((String) friends.get(i).get("name"));
+                float[] results = new float[1];
+                Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(),
+                        (Double) friends.get(i).get("lat"), (Double) friends.get(i).get("long"),
+                        results);
+                distances.add(String.format("%.1f", results[0] / 1000) + "km");
+                imageIds.add(R.drawable.ic_baseline_account_circle_24);
+            }
+        }
+    }
+
+    private void shareLocation(int position){
+        DocumentReference docRef = db.collection("users").document((String) friends.get(position).get("id"));
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        ArrayList<Map<String, Object>> friends = (ArrayList<Map<String, Object>>) document.get("friends");
+                        for (Map<String, Object> friend : friends){
+                            if (((String) friend.get("id")).equals("Rve0AFkG4XjQtGhJmQkV")){
+                                Log.d(TAG, "12");
+                                friend.put("lat", currentLocation.getLatitude());
+                                friend.put("long", currentLocation.getLongitude());
+                            }
+                        }
+                        docRef.update("friends", friends);
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
             }
         });
     }
-
-    private void shareLocationDialog(View view, ArrayList<String> names, ArrayList<Integer> imageid) {
+    private void shareLocationDialog(View view) {
 
         final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity());
         bottomSheetDialog.setContentView(R.layout.share_location_bottom_sheet);
 
         ListView l;
         l = bottomSheetDialog.findViewById(R.id.myFriendList);
-        CustomFriendList customFriendList = new CustomFriendList(getActivity(), names, null, imageid);
+        CustomFriendList customFriendList = new CustomFriendList(getActivity(), AllNames, null, AllImageIds);
         l.setAdapter(customFriendList);
-        l.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            }
-        });
         l.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -136,6 +257,9 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
+                                Log.d(TAG, String.valueOf(position));
+                                shareLocation(position);
+
                             }
                         });
 
@@ -182,11 +306,11 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.map = googleMap;
-        updateLocation(map);
+        updateLocation();
 
     }
 
-    public void updateLocation(GoogleMap googleMap){
+    public void updateLocation(){
         locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setInterval(1000);
@@ -209,17 +333,11 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
 
         if (marker == null) {
             MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("I am here!");
-            marker = googleMap.addMarker(markerOptions);
+            marker = map.addMarker(markerOptions);
         }
-        googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
+        map.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
         marker.setPosition(latLng);
-        float[] results = new float[1];
-        Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(),
-                -37.816178, 145.015345,
-                results);
-        Log.d("hahaha1", String.valueOf(results[0]/1000));
-
 
 
     }
