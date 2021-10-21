@@ -27,4 +27,9 @@
         android:name="comp90018.fitness.ui.training_recrods.TrainingRecordsFragment"
         android:label="@string/title_training_records"
         tools:layout="@layout/fragment_training_records" />
+    <fragment
+        android:id="@+id/itemFragment"
+        android:name="comp90018.fitness.ui.moments.ItemFragment"
+        android:label="Moments"
+        tools:layout="@layout/fragment_item_list" />
 </navigation>

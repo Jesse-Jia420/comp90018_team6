@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="5dp"
+    android:gravity="center"
+    android:background="@drawable/translucent"
+    >
+
+    <TextView
+        android:id="@+id/item_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:hint="47 mins ago"
+        android:textColor="#000000"
+        android:textSize="16dp"
+        android:textStyle="bold" />
+
+<!--    <HorizontalScrollView-->
+<!--        android:id="@+id/item_scroll"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="150dp"-->
+<!--        android:layout_below="@+id/item_time"-->
+<!--        android:layout_marginTop="0dp">-->
+
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:id="@+id/item_img_list"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"></androidx.constraintlayout.widget.ConstraintLayout>-->
+<!--    </HorizontalScrollView>-->
+    <ImageView
+        android:id="@+id/my_image_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/item_time" />
+
+    <TextView
+        android:id="@+id/item_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/my_image_view"
+        android:layout_marginTop="5dp"
+        android:hint="Title"
+        android:textColor="#000000"
+        android:textSize="16dp"
+        android:textStyle="bold" />
+
+<!--    <TextView-->
+<!--        android:id="@+id/item_content"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:textAppearance="?attr/textAppearanceListItem"-->
+<!--        android:layout_below="@+id/item_title"-->
+<!--        android:layout_alignRight="@+id/item_title"-->
+<!--        android:text="testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest"-->
+<!--        />-->
+
+    <ImageView
+        android:id="@+id/user_avatar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/item_title"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/default_user_avatar" />
+
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/item_title"
+        android:layout_alignTop="@+id/user_avatar"
+        android:layout_alignBottom="@+id/user_avatar"
+        android:layout_marginStart="5dp"
+        android:layout_toRightOf="@+id/user_avatar"
+        android:gravity="center"
+        android:text="NickName" />
+
+    <TextView
+        android:id="@+id/user_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/item_title"
+        android:layout_alignTop="@+id/user_avatar"
+        android:layout_alignRight="@id/my_image_view"
+        android:layout_alignBottom="@+id/user_avatar"
+        android:gravity="center"
+        android:text="350m" />
+
+</RelativeLayout>

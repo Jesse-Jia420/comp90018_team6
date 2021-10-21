@@ -1,0 +1,52 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/loop_pager"
+        android:layout_width="match_parent"
+        android:layout_height="400dp">
+    </androidx.viewpager.widget.ViewPager>
+    <TextView
+        android:id="@+id/moment_detail_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/loop_pager"
+        android:textFontWeight="800"
+        android:textSize="20dp"
+        android:text="Title"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp">
+    </TextView>
+    <TextView
+        android:id="@+id/moment_detail_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/moment_detail_title"
+        android:textFontWeight="800"
+        android:textSize="20dp"
+        android:text="Content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"/>
+    <TextView
+        android:id="@+id/moment_detail_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/moment_detail_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:text="10-01"/>
+
+    <TextView
+        android:id="@+id/moment_detail_comment_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/moment_detail_time"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
+        android:text="3165 comments" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_below="@+id/moment_detail_comment_num"/>
+</RelativeLayout>
