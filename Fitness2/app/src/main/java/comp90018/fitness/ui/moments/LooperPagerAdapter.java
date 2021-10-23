@@ -18,6 +18,7 @@ public class LooperPagerAdapter extends PagerAdapter {
 
     private ArrayList<String> mImgList;
 
+
     @Override
     public int getCount() {
         if (mImgList != null){
@@ -37,7 +38,7 @@ public class LooperPagerAdapter extends PagerAdapter {
         System.out.println(mImgList.get(position));
         Glide.with(container.getContext())
                 .load(mImgList.get(position))
-                .override(300, 300)
+//                .override(300, 300)
                 .placeholder(R.drawable.ic_menu_moments)
                 .centerCrop()
                 .into(imageView);

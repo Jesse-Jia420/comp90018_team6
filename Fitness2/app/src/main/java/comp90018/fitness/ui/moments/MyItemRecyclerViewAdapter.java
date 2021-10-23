@@ -82,27 +82,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         ArrayList<String> itemImgUrlList = new ArrayList<String>();
         ArrayList<ImageView> ivList = new ArrayList<ImageView>();
 
-//        int currentImgIndex = 0;
-//        for (int i = 0; i < mValues.get(position).imgList.size(); i++) {
-//            String itemImgUrl = mValues.get(position).imgList.get(i);
-//            ImageView iv = new ImageView(mContext);
-//            iv.setId(currentImgIndex);
-//            holder.mItemImgList.addView(iv);
-//            currentImgIndex++;
-//            itemImgUrlList.add(itemImgUrl);
-//            ivList.add(iv);
-//        }
-//        constraintLayout = (ConstraintLayout) constraintLayout.findViewById(R.id.item_img_list);
-//        constraintSet = new ConstraintSet();
-//        constraintSet.clone(constraintLayout);
-//        constraintSet.connect(ivList.get(0).getId(), ConstraintSet.LEFT,constraintLayout.getId(), ConstraintSet.LEFT, 0);
-//        constraintSet.connect(ivList.get(0).getId(), ConstraintSet.TOP,constraintLayout.getId(), ConstraintSet.TOP, 0);
-//        for (int i = 1; i < itemImgUrlList.size(); i++) {
-//            constraintSet.connect(ivList.get(i).getId(), ConstraintSet.LEFT, ivList.get(i-1).getId(), ConstraintSet.RIGHT, 5);
-//            constraintSet.connect(ivList.get(i).getId(), ConstraintSet.TOP, ivList.get(i-1).getId(), ConstraintSet.TOP, 0);
-//            constraintSet.connect(ivList.get(i).getId(), ConstraintSet.BOTTOM, ivList.get(i-1).getId(), ConstraintSet.BOTTOM, 0);
-//            constraintSet.applyTo(constraintLayout);
-//        }
+
 
     }
 
