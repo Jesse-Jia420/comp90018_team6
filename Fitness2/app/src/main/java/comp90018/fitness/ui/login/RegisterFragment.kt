@@ -41,7 +41,7 @@ class RegisterFragment : Fragment() {
 
         view.findViewById<Button>(R.id.btn_login_reg).setOnClickListener {
             var navRegister = activity as FragmentNavigation
-            navRegister.navigateFrag(loginFragment(),false)
+            navRegister.navigateFrag(LoginFragment(),false)
         }
 
         view.findViewById<Button>(R.id.btn_register_reg).setOnClickListener {
@@ -57,12 +57,15 @@ class RegisterFragment : Fragment() {
             password.text.toString()).addOnCompleteListener {
                 task ->
                 if (task.isSuccessful){
+                    //connect to homepage
                     var navHome = activity as FragmentNavigation
                     navHome.navigateFrag(HomeFragment(), addToStack = true)
+                    Toast.makeText(context, "Register Successful",Toast.LENGTH_SHORT).show()
+
                 }else{
-                    btn_register_reg.isEnabled = false
-                    btn_register_reg.alpha = 0.5f
-                    Toast.makeText(context, task.exception?.message,Toast.LENGTH_SHORT).show()
+                    btn_register_reg.isEnabled = true
+                    btn_register_reg.alpha = 1.0f
+                    Toast.makeText(context,task.exception?.message,Toast.LENGTH_SHORT).show()
                 }
         }
     }
@@ -90,9 +93,8 @@ class RegisterFragment : Fragment() {
                 if(username.text.toString().matches(Regex("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"))){
                     if (password.text.toString().length>=5){
                         if(password.text.toString() == confirmPassword.text.toString()){
-                            Toast.makeText(context, "Register Successful",Toast.LENGTH_SHORT).show()
-                            //firebaseSignUp()
-
+//                            Toast.makeText(context, "Register Successful",Toast.LENGTH_SHORT).show()
+                            firebaseSignUp()
                         }
                         else{
                             confirmPassword.setError("Password did not match", icon)

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".loginFragment"
+    tools:context=".LoginFragment"
     android:background="@drawable/image_background1">
 
     <LinearLayout

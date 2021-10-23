@@ -8,6 +8,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() ,FragmentNavigation{
+    //login once time
     private  lateinit var fAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,6 +16,7 @@ class MainActivity : AppCompatActivity() ,FragmentNavigation{
         setContentView(R.layout.activity_main)
         fAuth = Firebase.auth
 
+        //check the user exist or not
         val currentUser = fAuth.currentUser
         if(currentUser != null){
             supportFragmentManager.beginTransaction()
@@ -22,9 +24,8 @@ class MainActivity : AppCompatActivity() ,FragmentNavigation{
                 .commit()
         }else{
             supportFragmentManager.beginTransaction()
-                .add(R.id.container, loginFragment())
+                .add(R.id.container, LoginFragment())
                 .commit()
-
         }
     }
 
