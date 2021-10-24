@@ -191,10 +191,14 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
             if (friends.get(i).get("lat") != null && friends.get(i).get("long") != null){
                 names.add((String) friends.get(i).get("name"));
                 float[] results = new float[1];
-                Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(),
-                        (Double) friends.get(i).get("lat"), (Double) friends.get(i).get("long"),
-                        results);
-                distances.add(String.format("%.1f", results[0] / 1000) + "km");
+                if (currentLocation != null) {
+                    Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(),
+                            (Double) friends.get(i).get("lat"), (Double) friends.get(i).get("long"),
+                            results);
+                    distances.add(String.format("%.1f", results[0] / 1000) + "km");
+                } else {
+                    distances.add("--km");
+                }
                 imageIds.add(R.drawable.ic_baseline_account_circle_24);
             }
         }

@@ -53,8 +53,10 @@ public class PlaceholderContent implements MyItemRecyclerViewAdapter.ViewHolder.
                                 if (imgList.size() != 0) {
                                     imgUrlTemp = imgList.get(0).toString();
                                 }
-                                PlaceholderItem tempItem = new PlaceholderItem(document.getId(), document.get("mContent").toString(), document.get("mTitle").toString(), imgUrlTemp, document.get("mTime").toString(), document.get("mAuthorName").toString(), document.get("mAuthorAvatarUrl").toString(), distance, imgList);
-                                addItem(tempItem);
+                                if (document.get("mContent") != null && document.get("mTitle") != null && document.get("mTime") != null && document.get("mAuthorName") != null && document.get("mAuthorAvatarUrl") != null) {
+                                    PlaceholderItem tempItem = new PlaceholderItem(document.getId(), document.get("mContent").toString(), document.get("mTitle").toString(), imgUrlTemp, document.get("mTime").toString(), document.get("mAuthorName").toString(), document.get("mAuthorAvatarUrl").toString(), distance, imgList);
+                                    addItem(tempItem);
+                                }
                             }
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());

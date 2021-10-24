@@ -6,21 +6,21 @@
         android:icon="@drawable/ic_home_black_24dp"
         android:title="@string/title_home" />
 
-    <item
-        android:id="@+id/navigation_dashboard"
-        android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_dashboard" />
+<!--    <item-->
+<!--        android:id="@+id/navigation_dashboard"-->
+<!--        android:icon="@drawable/ic_dashboard_black_24dp"-->
+<!--        android:title="@string/title_dashboard" />-->
 
+<!--    <item-->
+<!--        android:id="@+id/navigation_notifications"-->
+<!--        android:icon="@drawable/ic_notifications_black_24dp"-->
+<!--        android:title="@string/title_notifications" />-->
+<!--    <item-->
+<!--        android:id="@+id/training_records"-->
+<!--        android:icon="@drawable/ic_notifications_black_24dp"-->
+<!--        android:title="@string/title_training_records" />-->
     <item
-        android:id="@+id/navigation_notifications"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_notifications" />
-    <item
-        android:id="@+id/training_records"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_training_records" />
-    <item
-        android:id="@+id/itemFragment"
+        android:id="@+id/Moments"
         android:icon="@drawable/ic_menu_moments"
         android:title="Moments" />
     <item
