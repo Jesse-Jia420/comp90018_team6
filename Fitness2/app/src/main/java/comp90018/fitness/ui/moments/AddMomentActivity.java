@@ -59,7 +59,7 @@ public class AddMomentActivity extends AppCompatActivity {
     private static final String USER_ID = "ASDASXCIWEWQNADS";
     private static final int PICK_IMAGE_REQUEST = 1;
     private Button mButtonChooseImage;
-    private Button mButtonUpload;
+//    private Button mButtonUpload;
     private Button mButtonSubmit;
     private ProgressBar mProgressBar;
     private EditText mTitle;
@@ -95,7 +95,7 @@ public class AddMomentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_moment);
 
         mButtonChooseImage = findViewById(R.id.button_choose_image);
-        mButtonUpload = findViewById(R.id.button_upload);
+//        mButtonUpload = findViewById(R.id.button_upload);
         mButtonSubmit = findViewById(R.id.button_submit);
         mProgressBar = findViewById(R.id.progress_bar);
 
@@ -117,12 +117,12 @@ public class AddMomentActivity extends AppCompatActivity {
                 openFileChooser();
             }
         });
-        mButtonUpload.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                uploadFile();
-            }
-        });
+//        mButtonUpload.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View v){
+//                uploadFile();
+//            }
+//        });
         mButtonSubmit.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -235,6 +235,7 @@ public class AddMomentActivity extends AppCompatActivity {
                 constraintSet.connect(ivList.get(i).getId(), ConstraintSet.BOTTOM, ivList.get(i-1).getId(), ConstraintSet.BOTTOM, 0);
                 constraintSet.applyTo(constraintLayout);
             }
+            uploadFile();
 
         }
     }
@@ -265,8 +266,6 @@ public class AddMomentActivity extends AppCompatActivity {
                                     public void onSuccess(Uri uri) {
                                         Uri downloadUrl = uri;
                                         imgUrlList.add(downloadUrl.toString());
-//                                    Upload upload = new Upload(mEditTextFileName.getText().toString().trim(), downloadUrl.toString());
-//                                    mDatabaseRef.collection("uploads_image").add(upload);
                                     }
                                 });
                                 Toast.makeText(AddMomentActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();

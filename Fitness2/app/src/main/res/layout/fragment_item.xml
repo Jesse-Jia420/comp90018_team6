@@ -14,9 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:hint="47 mins ago"
-        android:textColor="#000000"
-        android:textSize="16dp"
-        android:textStyle="bold" />
+        android:textColor="#a8a8a8"
+        android:textSize="12dp"/>
 
 <!--    <HorizontalScrollView-->
 <!--        android:id="@+id/item_scroll"-->
@@ -41,7 +40,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/my_image_view"
-        android:layout_marginTop="5dp"
         android:hint="Title"
         android:textColor="#000000"
         android:textSize="16dp"
@@ -75,6 +73,7 @@
         android:layout_marginStart="5dp"
         android:layout_toRightOf="@+id/user_avatar"
         android:gravity="center"
+        android:textColor="#000000"
         android:text="NickName" />
 
     <TextView
@@ -86,6 +85,7 @@
         android:layout_alignRight="@id/my_image_view"
         android:layout_alignBottom="@+id/user_avatar"
         android:gravity="center"
+        android:textColor="#a8a8a8"
         android:text="350m" />
 
 </RelativeLayout>

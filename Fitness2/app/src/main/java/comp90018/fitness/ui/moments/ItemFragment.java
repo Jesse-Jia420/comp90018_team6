@@ -17,9 +17,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import java.util.List;
 
+import comp90018.fitness.MainActivity;
 import comp90018.fitness.R;
 import comp90018.fitness.ui.moments.placeholder.PlaceholderContent;
 
@@ -58,6 +60,7 @@ public class ItemFragment extends Fragment implements MyItemRecyclerViewAdapter.
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+
     }
 
     @Override

@@ -9,12 +9,14 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import comp90018.fitness.MainActivity;
 import comp90018.fitness.R;
 import comp90018.fitness.databinding.FragmentItemBinding;
 import comp90018.fitness.ui.moments.placeholder.PlaceholderContent;
@@ -37,6 +39,8 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     private final List<PlaceholderItem> mValues;
 
     private MyItemRecyclerViewAdapter.ViewHolder.OnItemListener mOnItemListener;
+
+
 
     public MyItemRecyclerViewAdapter(List<PlaceholderItem> items, Context context, ViewHolder.OnItemListener onItemListener) {
         mValues = items;
@@ -82,8 +86,6 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         ArrayList<String> itemImgUrlList = new ArrayList<String>();
         ArrayList<ImageView> ivList = new ArrayList<ImageView>();
 
-
-
     }
 
 
@@ -123,6 +125,8 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             mTime = binding.itemTime;
 //            mItemImgList = binding.itemImgList;
             itemView.setOnClickListener(this);
+
+
         }
 
         @Override

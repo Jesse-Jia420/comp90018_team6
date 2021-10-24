@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
 
-    private Button button;
+    private Button mButton;
 
 
     @Override
@@ -49,9 +49,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-
-        button = findViewById(R.id.addMoment);
-        button.setOnClickListener(new View.OnClickListener() {
+        mButton =  findViewById(R.id.addMoment);
+        mButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -61,8 +60,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
     }
 
 

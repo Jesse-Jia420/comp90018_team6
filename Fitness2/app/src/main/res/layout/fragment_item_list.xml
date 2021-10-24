@@ -1,19 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/list"
-    android:name="comp90018.fitness.ui.moments.ItemFragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
-    app:layoutManager="LinearLayoutManager"
-    tools:context=".ui.moments.ItemFragment"
-    tools:listitem="@layout/fragment_item"
-    android:layout_marginBottom="60dp">
-</androidx.recyclerview.widget.RecyclerView>
+<!--<androidx.constraintlayout.widget.ConstraintLayout-->
+<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:name="comp90018.fitness.ui.moments.ItemFragment"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_marginLeft="10dp"-->
+<!--    android:layout_marginRight="10dp"-->
+<!--    android:orientation="vertical"-->
+<!--    tools:context=".ui.moments.ItemFragment"-->
+<!--    app:layoutManager="LinearLayoutManager"-->
+<!--    android:layout_marginBottom="60dp">-->
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/list"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        tools:listitem="@layout/fragment_item">-->
+<!--    </androidx.recyclerview.widget.RecyclerView>-->
 
+<!--    <Button-->
+<!--        android:id="@+id/addMoment"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/list"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/list"-->
+<!--        android:text="+"-->
+<!--        android:background="@drawable/translucent_avatar_button"-->
+<!--        android:textSize="22dp"/>-->
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<androidx.recyclerview.widget.RecyclerView
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:name="comp90018.fitness.ui.moments.ItemFragment"
+android:id="@+id/list"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+app:layoutManager="LinearLayoutManager"
+tools:context=".ui.moments.ItemFragment"
+tools:listitem="@layout/fragment_item"
+android:layout_marginLeft="10dp"
+android:layout_marginRight="10dp"
+android:layout_marginBottom="60dp">
+</androidx.recyclerview.widget.RecyclerView>
 
 
 
