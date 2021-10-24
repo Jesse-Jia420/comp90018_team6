@@ -22,4 +22,10 @@
     <style name="Theme.Fitness.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.Fitness.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.Fitness.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="Theme.Fitness.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.Fitness.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

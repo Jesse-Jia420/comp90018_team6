@@ -8,10 +8,11 @@ android {
 
     defaultConfig {
         applicationId "comp90018.fitness"
-        minSdkVersion 21
+        minSdkVersion 22
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+        vectorDrawables.useSupportLibrary true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -51,6 +52,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-inappmessaging:20.1.0'
     implementation 'androidx.annotation:annotation:1.2.0'
     implementation 'com.google.firebase:firebase-storage:20.0.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.0'
+    implementation 'com.google.firebase:firebase-firestore:23.0.4'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

@@ -23,5 +23,9 @@
         android:id="@+id/itemFragment"
         android:icon="@drawable/ic_menu_moments"
         android:title="Moments" />
+    <item
+        android:id="@+id/map"
+        android:icon="@drawable/ic_baseline_pin_drop_24"
+        android:title="@string/title_find_my_friends" />
 
 </menu>

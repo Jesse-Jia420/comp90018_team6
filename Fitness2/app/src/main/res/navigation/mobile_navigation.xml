@@ -32,4 +32,9 @@
         android:name="comp90018.fitness.ui.moments.ItemFragment"
         android:label="Moments"
         tools:layout="@layout/fragment_item_list" />
+    <fragment
+        android:id="@+id/map"
+        android:name="comp90018.fitness.ui.find_my_friends.FindFriendsFragment"
+        android:label="@string/title_find_my_friends"
+        tools:layout="@layout/fragment_find_friends" />
 </navigation>
