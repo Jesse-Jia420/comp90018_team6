@@ -50,51 +50,85 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:text="Title"
-                android:textFontWeight="800"
                 android:textColor="#000000"
+                android:textFontWeight="800"
                 android:textSize="20dp"></TextView>
+
             <TextView
                 android:id="@+id/moment_detail_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/moment_detail_title"
-                android:textFontWeight="800"
-                android:textSize="16dp"
-                android:textColor="#000000"
-                android:text="Content"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"/>
+                android:text="Content"
+                android:textColor="#000000"
+                android:textFontWeight="800"
+                android:textSize="16dp" />
 
             <TextView
                 android:id="@+id/moment_detail_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/moment_detail_content"
-                android:layout_marginTop="20dp"
                 android:layout_marginLeft="10dp"
-                android:text="10-01"/>
+                android:layout_marginTop="20dp"
+                android:text="10-01" />
 
             <TextView
                 android:id="@+id/moment_detail_comment_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/moment_detail_time"
-                android:layout_marginTop="30dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginTop="30dp"
                 android:text="3165 comments" />
 
-            <ImageView
+            <!--            <ImageView-->
+            <!--                android:id="@+id/moment_add_comment"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="30dp"-->
+            <!--                android:layout_below="@+id/moment_detail_comment_num"-->
+            <!--                android:background="@color/teal_700">-->
+            <!--            </ImageView>-->
+            <LinearLayout
                 android:id="@+id/moment_add_comment"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/moment_detail_comment_num"
-                android:background="@color/teal_700"/>
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp">
+
+                <EditText
+                    android:id="@+id/moment_add_comment_edit"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:background="@color/teal_700"
+                    android:hint="Add a comment"
+                    android:paddingLeft="10dp" />
+
+                <Button
+                    android:id="@+id/moment_add_comment_send"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:text="Send">
+
+                </Button>
+            </LinearLayout>
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/moment_comments_list"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/moment_add_comment"
+                android:layout_marginTop="5dp"
                 tools:listitem="@layout/comment_item" />
         </RelativeLayout>
     </ScrollView>

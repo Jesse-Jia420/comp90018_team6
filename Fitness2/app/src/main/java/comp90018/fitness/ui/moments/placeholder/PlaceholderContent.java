@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -37,6 +38,7 @@ public class PlaceholderContent implements MyItemRecyclerViewAdapter.ViewHolder.
     public static void getFirebaseData() {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("post_test")
+                .orderBy("mTime", Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     private String TAG;

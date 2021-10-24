@@ -137,6 +137,7 @@ public class AddMomentActivity extends AppCompatActivity {
     private void submit() {
         Post post = new Post(mTitle.getText().toString().trim(), mContent.getText().toString().trim(), imgUrlList, mUserName.getText().toString().trim(), avatarUrl, mAuthorId);
         mDatabaseRef.collection("post_test").add(post);
+        this.finish();
     }
     private void getUserInfo(final String id){
         mAuthorId = id;

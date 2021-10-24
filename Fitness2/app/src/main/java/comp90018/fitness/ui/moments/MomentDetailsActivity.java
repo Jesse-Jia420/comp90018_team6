@@ -6,11 +6,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -23,11 +27,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.core.OrderBy;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.security.AccessController;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +48,10 @@ public class MomentDetailsActivity extends AppCompatActivity {
 
 
     private static final String TAG = "MomentDetailsActivity";
+
+    private String POST_ID;
+    private String USER_ID = "ASDASXCIWEWQNADS";
+
 
     private ViewPager mLoopPager;
     private LooperPagerAdapter mLoopPagerAdapter;
@@ -52,9 +65,13 @@ public class MomentDetailsActivity extends AppCompatActivity {
     private ListView mCommentsList;
     private ArrayList<CommentsItem> data;
 
-
     private ListViewAdapter mCommentsListAdapter;
     private RecyclerView mRecycleView;
+
+    private FirebaseFirestore mDatabaseRef;
+    private Button mButtonAddComment;
+    private EditText mAddCommentEdit;
+
 
     /**
      * An array of sample (placeholder) items.
@@ -99,6 +116,7 @@ public class MomentDetailsActivity extends AppCompatActivity {
                     .centerCrop()
                     .into(mAuthorAvatar);
             getComments(item.id);
+            POST_ID = item.id;
 
         }
 
@@ -113,6 +131,7 @@ public class MomentDetailsActivity extends AppCompatActivity {
         ArrayList<CommentsItem> commentList = new ArrayList<CommentsItem>();
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("comment_test")
+                .orderBy("time", Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     private String TAG;
@@ -121,7 +140,7 @@ public class MomentDetailsActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 if(document.get("postId").toString().equals(postId)){
-                                    CommentsItem tempItem = new CommentsItem(document.getId(), document.get("commentContent").toString(), document.get("time").toString(), document.get("postId").toString(),document.get("userId").toString());
+                                    CommentsItem tempItem = new CommentsItem(document.getId(), document.get("content").toString(), document.get("time").toString(), document.get("postId").toString(),document.get("userId").toString());
                                     commentList.add(tempItem);
                                     addItem(tempItem);
                                 }
@@ -150,7 +169,31 @@ public class MomentDetailsActivity extends AppCompatActivity {
         mCommentsListAdapter = new ListViewAdapter(this);
         mRecycleView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false));
         mRecycleView.setAdapter(mCommentsListAdapter);
+
+        mDatabaseRef = FirebaseFirestore.getInstance();
+        mAddCommentEdit = this.findViewById(R.id.moment_add_comment_edit);
+        mButtonAddComment = this.findViewById(R.id.moment_add_comment_send);
+        mButtonAddComment.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                addComment();
+            }
+        });
     }
+
+    private void addComment() {
+        CommentsItem commentsItem = new CommentsItem(mAddCommentEdit.getText().toString().trim(), POST_ID, USER_ID);
+        mDatabaseRef.collection("comment_test").add(commentsItem);
+        mAddCommentEdit.setText("");
+        mAddCommentEdit.clearFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        // 隐藏软键盘
+        imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+        getComments(POST_ID);
+
+    }
+
+
 
     public static class CommentsItem{
         public String id;
@@ -170,8 +213,24 @@ public class MomentDetailsActivity extends AppCompatActivity {
             this.userId = user_id;
         }
 
+        public CommentsItem(String content, String post_id, String user_id){
+//            this.id = id;
+            this.content = content;
+            this.time = getTime();
+            this.postId = post_id;
+            this.userId = user_id;
+        }
+
         public CommentsItem[] newArray(int i) {
             return new CommentsItem[i];
+        }
+
+        private String getTime() {
+            SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
+            sdf.applyPattern("yyyy-MM-dd HH:mm:ss a");// a为am/pm的标记
+            Date date = new Date();// 获取当前时间
+            System.out.println("Current Time：" + sdf.format(date)); // 输出已经格式化的现在时间（24小时制）
+            return sdf.format(date);
         }
 
     }
