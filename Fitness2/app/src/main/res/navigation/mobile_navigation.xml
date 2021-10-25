@@ -22,11 +22,11 @@
 <!--        android:name="comp90018.fitness.ui.notifications.NotificationsFragment"-->
 <!--        android:label="@string/title_notifications"-->
 <!--        tools:layout="@layout/fragment_notifications" />-->
-<!--    <fragment-->
-<!--        android:id="@+id/training_records"-->
-<!--        android:name="comp90018.fitness.ui.training_recrods.TrainingRecordsFragment"-->
-<!--        android:label="@string/title_training_records"-->
-<!--        tools:layout="@layout/fragment_training_records" />-->
+    <fragment
+        android:id="@+id/exercise"
+        android:name="comp90018.fitness.ui.exercise.MainActivity_pedometer"
+        android:label="@string/Exercise"
+        tools:layout="@layout/activity_home" />
     <fragment
         android:id="@+id/Moments"
         android:name="comp90018.fitness.ui.moments.ItemFragment"

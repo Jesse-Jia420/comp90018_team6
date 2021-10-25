@@ -1,41 +1,43 @@
-package comp90018.fitness;
+package comp90018.fitness.ui;
 
-import static comp90018.fitness.ui.moments.placeholder.PlaceholderContent.getFirebaseData;
-
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import comp90018.fitness.R;
 import comp90018.fitness.databinding.ActivityMainBinding;
 import comp90018.fitness.ui.moments.AddMomentActivity;
+
+import static comp90018.fitness.ui.moments.placeholder.PlaceholderContent.getFirebaseData;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
 
-    private Button button;
+    private String TAG = "First Demo";
+    public static String MESSAGE = "Message";
+    public static int MESSAGE_RECEIVE = 1;
 
+    /* end of exercise changes */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getFirebaseData();
         super.onCreate(savedInstanceState);
 
+        /* retrive firebase data */
+        getFirebaseData();
+
+        /* setting bindings for the activity */
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -49,8 +51,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-
-        button = findViewById(R.id.addMoment);
+        /* add moment button function */
+        Button button = findViewById(R.id.addMoment);
         button.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -64,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+
 
 
 

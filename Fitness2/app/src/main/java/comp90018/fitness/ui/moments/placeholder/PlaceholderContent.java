@@ -32,9 +32,6 @@ import comp90018.fitness.ui.moments.MyItemRecyclerViewAdapter;
 public class PlaceholderContent implements MyItemRecyclerViewAdapter.ViewHolder.OnItemListener {
 
 
-    //    static {
-//        getFirebaseData();
-//    }
     public static void getFirebaseData() {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("post_test")
