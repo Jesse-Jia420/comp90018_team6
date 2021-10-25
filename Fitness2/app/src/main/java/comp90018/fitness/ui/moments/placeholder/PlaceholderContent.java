@@ -31,37 +31,34 @@ import comp90018.fitness.ui.moments.MyItemRecyclerViewAdapter;
  */
 public class PlaceholderContent implements MyItemRecyclerViewAdapter.ViewHolder.OnItemListener {
 
-
-    //    static {
-//        getFirebaseData();
+//    public static void getFirebaseData() {
+//        ITEMS.clear();
+//        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        db.collection("post_test")
+//                .orderBy("mTime", Query.Direction.DESCENDING)
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    private String TAG;
+//
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                String distance = calcDistance();
+//                                ArrayList<String> imgList = (ArrayList<String>) document.get("mImageUrl");
+//                                String imgUrlTemp = "";
+//                                if (imgList.size() != 0) {
+//                                    imgUrlTemp = imgList.get(0).toString();
+//                                }
+//                                PlaceholderItem tempItem = new PlaceholderItem(document.getId(), document.get("mContent").toString(), document.get("mTitle").toString(), imgUrlTemp, document.get("mTime").toString(), document.get("mAuthorName").toString(), document.get("mAuthorAvatarUrl").toString(), distance, imgList);
+//                                addItem(tempItem);
+//                            }
+//                        } else {
+//                            Log.w(TAG, "Error getting documents.", task.getException());
+//                        }
+//                    }
+//                });
 //    }
-    public static void getFirebaseData() {
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("post_test")
-                .orderBy("mTime", Query.Direction.DESCENDING)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    private String TAG;
-
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                String distance = calcDistance();
-                                ArrayList<String> imgList = (ArrayList<String>) document.get("mImageUrl");
-                                String imgUrlTemp = "";
-                                if (imgList.size() != 0) {
-                                    imgUrlTemp = imgList.get(0).toString();
-                                }
-                                PlaceholderItem tempItem = new PlaceholderItem(document.getId(), document.get("mContent").toString(), document.get("mTitle").toString(), imgUrlTemp, document.get("mTime").toString(), document.get("mAuthorName").toString(), document.get("mAuthorAvatarUrl").toString(), distance, imgList);
-                                addItem(tempItem);
-                            }
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
-                        }
-                    }
-                });
-    }
 
     public static String calcDistance() {
         return "350m";
@@ -82,15 +79,11 @@ public class PlaceholderContent implements MyItemRecyclerViewAdapter.ViewHolder.
      */
     public static final Map<String, PlaceholderItem> ITEM_MAP = new HashMap<String, PlaceholderItem>();
 
-
-    private static void addItem(PlaceholderItem item) {
+    public static void addItem(PlaceholderItem item) {
         ITEMS.add(item);
         ITEM_MAP.put(item.id, item);
     }
 
-//    private static PlaceholderItem createPlaceholderItem(int position) {
-//        return new PlaceholderItem(String.valueOf(position), "Item " + values[position-1], makeDetails(position), urls[position-1]);
-//    }
 
     private static String makeDetails(int position) {
         StringBuilder builder = new StringBuilder();

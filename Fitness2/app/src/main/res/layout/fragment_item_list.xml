@@ -31,19 +31,19 @@
 <!--</androidx.constraintlayout.widget.ConstraintLayout>-->
 
 <androidx.recyclerview.widget.RecyclerView
-xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:name="comp90018.fitness.ui.moments.ItemFragment"
-android:id="@+id/list"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-app:layoutManager="LinearLayoutManager"
-tools:context=".ui.moments.ItemFragment"
-tools:listitem="@layout/fragment_item"
-android:layout_marginLeft="10dp"
-android:layout_marginRight="10dp"
-android:layout_marginBottom="60dp">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:name="comp90018.fitness.ui.moments.ItemFragment"
+    android:id="@+id/list"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layoutManager="LinearLayoutManager"
+    tools:context=".ui.moments.ItemFragment"
+    tools:listitem="@layout/fragment_item"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginBottom="60dp">
 </androidx.recyclerview.widget.RecyclerView>
 
 

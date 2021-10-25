@@ -51,6 +51,7 @@ import com.google.firebase.storage.UploadTask;
 import java.net.URL;
 import java.util.ArrayList;
 
+import comp90018.fitness.MainActivity;
 import comp90018.fitness.R;
 import comp90018.fitness.ui.moments.placeholder.PlaceholderContent;
 

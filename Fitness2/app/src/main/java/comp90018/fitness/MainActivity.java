@@ -1,7 +1,5 @@
 package comp90018.fitness;
 
-import static comp90018.fitness.ui.moments.placeholder.PlaceholderContent.getFirebaseData;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -33,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        getFirebaseData();
         super.onCreate(savedInstanceState);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
