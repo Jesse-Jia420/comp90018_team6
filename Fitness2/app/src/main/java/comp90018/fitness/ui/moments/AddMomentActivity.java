@@ -352,7 +352,8 @@ public class AddMomentActivity extends AppCompatActivity {
                                         imgUrlList.add(downloadUrl.toString());
                                     }
                                 });
-                                Toast.makeText(AddMomentActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
+                                mButtonSubmit.setEnabled(true);
+                                mButtonSubmit.setTextColor(0xFFFFFFFF);
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -364,6 +365,11 @@ public class AddMomentActivity extends AppCompatActivity {
                         .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                                Toast.makeText(AddMomentActivity.this, "Uploading now", Toast.LENGTH_SHORT).show();
+
+                                mButtonSubmit.setEnabled(false);
+                                mButtonSubmit.setTextColor(0xFFD0EFC6);
+
                                 double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
                                 mProgressBar.setProgress((int) progress);
                             }
