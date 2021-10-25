@@ -50,6 +50,14 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/edit_content_edit"
             android:text="Add Image" />
+        <Button
+            android:id="@+id/button_choose_image_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edit_content_edit"
+            android:layout_marginLeft="10dp"
+            android:layout_toEndOf="@+id/button_choose_image"
+            android:text="Take a Photo" />
 
         <HorizontalScrollView
             android:id="@+id/upload_img_area"
