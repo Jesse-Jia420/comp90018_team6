@@ -49,6 +49,8 @@ public class ItemFragment extends Fragment implements MyItemRecyclerViewAdapter.
     private int mColumnCount = 2;
 
     ActionBar actionBar;
+    private Button mButton;
+
 
 
     /**
@@ -78,15 +80,29 @@ public class ItemFragment extends Fragment implements MyItemRecyclerViewAdapter.
 
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_item_list, container, false);
 
+        View view = inflater.inflate(R.layout.fragment_item_list, container, false);
         // Set the adapter
-        if (view instanceof RecyclerView) {
+//        if (view instanceof RecyclerView) {
+        if (view.findViewById(R.id.list) instanceof RecyclerView) {
+
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+            mButton =  view.findViewById(R.id.addMoment);
+
+            mButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 给bnt1添加点击响应事件
+                    Intent intent = new Intent(ItemFragment.this.getActivity(), AddMomentActivity.class);
+                    //启动
+                    startActivity(intent);
+                }
+            });
             if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {

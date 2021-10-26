@@ -55,6 +55,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         void onItemClick(View view, int position);
     }
 
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(FragmentItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false), mOnItemListener);
@@ -110,7 +111,6 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         OnItemListener mOnItemListener;
 
 
-
         public ViewHolder(FragmentItemBinding binding, OnItemListener onItemListener) {
             super(binding.getRoot());
 
@@ -125,7 +125,6 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             mTime = binding.itemTime;
 //            mItemImgList = binding.itemImgList;
             itemView.setOnClickListener(this);
-
 
         }
 

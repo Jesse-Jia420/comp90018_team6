@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
 
-    private Button mButton;
+//    private Button mButton;
 
 
     @Override
@@ -46,17 +46,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-        mButton =  findViewById(R.id.addMoment);
-        mButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // 给bnt1添加点击响应事件
-                Intent intent = new Intent(MainActivity.this, AddMomentActivity.class);
-                //启动
-                startActivity(intent);
-            }
-        });
     }
 
 
