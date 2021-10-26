@@ -21,8 +21,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class login extends AppCompatActivity {
     TextView createAccount;
-    EditText myEmail, myPassword;
-    Button myLoginBtn;
+    EditText inputEmail, inputPassword;
+    Button LoginBtn;
     FirebaseAuth fAuth;
     FirebaseUser myUser;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
@@ -32,16 +32,15 @@ public class login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        createAccount =findViewById(R.id.signUpBtn);
-
+        createAccount =findViewById(R.id.createNewAccount);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        myEmail = findViewById(R.id.email);
-        myPassword = findViewById(R.id.password);
+        inputEmail = findViewById(R.id.email);
+        inputPassword = findViewById(R.id.password);
         fAuth = FirebaseAuth.getInstance();
         myUser =fAuth.getCurrentUser();
         progressDialog = new ProgressDialog(this);
-        myLoginBtn =findViewById(R.id.loginBtn);
+        LoginBtn =findViewById(R.id.loginBtn);
 
         createAccount.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,7 +48,7 @@ public class login extends AppCompatActivity {
                 startActivity(new Intent(login.this, Register.class));
             }
         });
-        myLoginBtn.setOnClickListener(new View.OnClickListener() {
+        LoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 perforLogin();
@@ -58,19 +57,19 @@ public class login extends AppCompatActivity {
     }
 
     private void perforLogin() {
-        String email = myEmail.getText().toString();
-        String password = myPassword.getText().toString();
+        String email = inputEmail.getText().toString();
+        String password = inputPassword.getText().toString();
 
         if (!email.matches(emailPattern)){
-            myEmail.setError("Please Enter correct Email Address.");
+            inputEmail.setError("Please Enter correct Email Address.");
         }else if(password.isEmpty()|| password.length() < 6){
-            myPassword.setError("Please enter password that more than 6 characters");
+            inputPassword.setError("Please enter password that more than 6 characters");
         }else {
             progressDialog.setMessage("Please Wait for Login...");
             progressDialog.setTitle("Login");
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();
-            fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
@@ -87,7 +86,7 @@ public class login extends AppCompatActivity {
     }
 
     private void sendUserToNextActivity() {
-        Intent intent= new Intent(login.this,Register.class);
+        Intent intent= new Intent(login.this,MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }

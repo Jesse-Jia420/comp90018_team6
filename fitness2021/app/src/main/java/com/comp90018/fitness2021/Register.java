@@ -21,13 +21,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class Register extends AppCompatActivity {
-    EditText myFullName, myEmail, myPassword, myConfirmPassword, myGender, myHeight, myWeight;
-    Button mySignUpBtn;
-    TextView myLoginBtn;
+    EditText inputFullName, inputEmail, inputPassword, inputConfirmPassword, inputGender, inputHeight, inputWeight;
+    Button RegisterBtn;
+    TextView alreadyHaveAccount;
     FirebaseAuth fAuth;
     FirebaseUser myUser;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,30 +36,29 @@ public class Register extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        myFullName = findViewById(R.id.fullName);
-        myEmail = findViewById(R.id.email);
-        myPassword = findViewById(R.id.password);
-        myConfirmPassword = findViewById(R.id.confirmPassword);
-        myGender = findViewById(R.id.gender);
-        myHeight = findViewById(R.id.height);
-        myWeight = findViewById(R.id.weight);
-        mySignUpBtn = findViewById(R.id.signUpBtn);
+        inputFullName = findViewById(R.id.inputFullName);
+        inputEmail = findViewById(R.id.inputEmail);
+        inputPassword = findViewById(R.id.inputPassword);
+        inputConfirmPassword = findViewById(R.id.inputConfirmPassword);
+        inputGender = findViewById(R.id.inputGender);
+        inputHeight = findViewById(R.id.inputHeight);
+        inputWeight = findViewById(R.id.inputWeight);
+        RegisterBtn = findViewById(R.id.registerBtn);
 
         //get information from firebase
         fAuth = FirebaseAuth.getInstance();
         myUser =fAuth.getCurrentUser();
         progressDialog = new ProgressDialog(this);
-        
-        myLoginBtn = findViewById(R.id.existMember);
 
-        myLoginBtn.setOnClickListener(new View.OnClickListener(){
+        alreadyHaveAccount = findViewById(R.id.alreadyHaveAccount);
+        alreadyHaveAccount.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 startActivity(new Intent(Register.this,login.class));
             }
         });
 
-        mySignUpBtn.setOnClickListener(new View.OnClickListener(){
+        RegisterBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 PerforAuth();
@@ -69,19 +69,19 @@ public class Register extends AppCompatActivity {
     }
 
     private void PerforAuth() {
-        String email = myEmail.getText().toString();
-        String password = myPassword.getText().toString();
-        String confirmPassword =myConfirmPassword.getText().toString();
+        String email = inputEmail.getText().toString();
+        String password = inputPassword.getText().toString();
+        String confirmPassword =inputConfirmPassword.getText().toString();
 
         if (!email.matches(emailPattern)){
-            myEmail.setError("Please Enter correct Email Address.");
+            inputEmail.setError("Please Enter correct Email Address.");
         }else if(password.isEmpty()|| password.length() < 6){
-            myPassword.setError("Please enter password that more than 6 characters");
+            inputPassword.setError("Please enter password that more than 6 characters");
         }else if(!password.equals(confirmPassword)){
-            myConfirmPassword.setError("The password doesn't match");
+            inputConfirmPassword.setError("The password doesn't match");
         }else {
             progressDialog.setMessage("Please Wait...");
-            progressDialog.setTitle("Registered");
+            progressDialog.setTitle("Registration");
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();
 
@@ -102,7 +102,7 @@ public class Register extends AppCompatActivity {
     }
 
     private void sendUserToNextActivity() {
-        Intent intent= new Intent(Register.this,login.class);
+        Intent intent= new Intent(Register.this,MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
