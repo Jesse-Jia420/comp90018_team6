@@ -1,28 +1,21 @@
 package comp90018.fitness.ui.moments;
 
-import static android.content.ContentValues.TAG;
-
-import static comp90018.fitness.ui.moments.placeholder.PlaceholderContent.addItem;
-import static comp90018.fitness.ui.moments.placeholder.PlaceholderContent.calcDistance;
-
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -32,11 +25,13 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import comp90018.fitness.MainActivity;
 import comp90018.fitness.R;
 import comp90018.fitness.ui.moments.placeholder.PlaceholderContent;
+
+import static android.content.ContentValues.TAG;
+import static comp90018.fitness.ui.moments.placeholder.PlaceholderContent.addItem;
+import static comp90018.fitness.ui.moments.placeholder.PlaceholderContent.calcDistance;
 
 /**
  * A fragment representing a list of Items.

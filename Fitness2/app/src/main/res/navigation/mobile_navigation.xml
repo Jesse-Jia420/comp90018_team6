@@ -4,12 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/Moments">
-
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="comp90018.fitness.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/Moments"
+        android:name="comp90018.fitness.ui.moments.ItemFragment"
+        android:label="Moments"
+        tools:layout="@layout/fragment_item_list" />
+    <fragment
+        android:id="@+id/map"
+        android:name="comp90018.fitness.ui.find_my_friends.FindFriendsFragment"
+        android:label="@string/title_find_my_friends"
+        tools:layout="@layout/fragment_find_friends" />
+    <fragment
+        android:id="@+id/exercise"
+        android:name="comp90018.fitness.ui.exercise.MainActivity_pedometer"
+        android:label="@string/Exercise"
+        tools:layout="@layout/activity_home" />
+    <fragment
+        android:id="@+id/friends"
+        android:name="comp90018.fitness.ui.chat.ChatListFragment"
+        android:label="@string/Friends"
+        tools:layout="@layout/chatlist_activity" />
+    <fragment
+        android:id="@+id/login"
+        android:name="comp90018.fitness.ui.login.loginFrame"
+        android:label="@string/Login"
+        tools:layout="@layout/activity_login" />
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_home"-->
+<!--        android:name="comp90018.fitness.ui.home.HomeFragment"-->
+<!--        android:label="@string/title_home"-->
+<!--        tools:layout="@layout/fragment_home" />-->
 
 <!--    <fragment-->
 <!--        android:id="@+id/navigation_dashboard"-->
@@ -22,19 +46,7 @@
 <!--        android:name="comp90018.fitness.ui.notifications.NotificationsFragment"-->
 <!--        android:label="@string/title_notifications"-->
 <!--        tools:layout="@layout/fragment_notifications" />-->
-    <fragment
-        android:id="@+id/exercise"
-        android:name="comp90018.fitness.ui.exercise.MainActivity_pedometer"
-        android:label="@string/Exercise"
-        tools:layout="@layout/activity_home" />
-    <fragment
-        android:id="@+id/Moments"
-        android:name="comp90018.fitness.ui.moments.ItemFragment"
-        android:label="Moments"
-        tools:layout="@layout/fragment_item_list" />
-    <fragment
-        android:id="@+id/map"
-        android:name="comp90018.fitness.ui.find_my_friends.FindFriendsFragment"
-        android:label="@string/title_find_my_friends"
-        tools:layout="@layout/fragment_find_friends" />
+
+
+
 </navigation>

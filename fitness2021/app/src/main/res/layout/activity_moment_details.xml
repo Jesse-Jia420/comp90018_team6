@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.MainActivity">
+
+    <ImageView
+        android:id="@+id/author_avatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/default_user_avatar" />
+    <TextView
+        android:id="@+id/author_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/author_avatar"
+        android:layout_alignBottom="@+id/author_avatar"
+        android:layout_marginStart="5dp"
+        android:layout_toRightOf="@+id/author_avatar"
+        android:gravity="center"
+        android:textSize="18dp"
+        android:textColor="#000000"
+        android:text="Default Author Name"/>
+
+    <ScrollView android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/author_avatar">
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/loop_pager"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:layout_alignParentTop="true"></androidx.viewpager.widget.ViewPager>
+
+            <TextView
+                android:id="@+id/moment_detail_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/loop_pager"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Title"
+                android:textColor="#000000"
+                android:textFontWeight="800"
+                android:textSize="20dp"></TextView>
+
+            <TextView
+                android:id="@+id/moment_detail_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/moment_detail_title"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Content"
+                android:textColor="#000000"
+                android:textFontWeight="800"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/moment_detail_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/moment_detail_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:text="10-01" />
+
+            <TextView
+                android:id="@+id/moment_detail_comment_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/moment_detail_time"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="30dp"
+                android:text="3165 comments" />
+
+            <!--            <ImageView-->
+            <!--                android:id="@+id/moment_add_comment"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="30dp"-->
+            <!--                android:layout_below="@+id/moment_detail_comment_num"-->
+            <!--                android:background="@color/teal_700">-->
+            <!--            </ImageView>-->
+            <LinearLayout
+                android:id="@+id/moment_add_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/moment_detail_comment_num"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="5dp">
+
+                <EditText
+                    android:id="@+id/moment_add_comment_edit"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:background="@color/teal_700"
+                    android:hint="Add a comment"
+                    android:paddingLeft="10dp" />
+
+                <Button
+                    android:id="@+id/moment_add_comment_send"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:text="Send">
+
+                </Button>
+            </LinearLayout>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/moment_comments_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/moment_add_comment"
+                android:layout_marginTop="5dp"
+                tools:listitem="@layout/comment_item" />
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

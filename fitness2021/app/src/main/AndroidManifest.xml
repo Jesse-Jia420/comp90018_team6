@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<<<<<<< HEAD:Fitness2/app/src/main/AndroidManifest.xml
+    package="comp90018.fitness">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <!--
+         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but you must specify either coarse or fine
+         location permissions for the "MyLocation" functionality.
+    -->
+=======
+    package="com.comp90018.fitness2021">
+    <uses-permission android:name="android.permission.INTERNET" />
+>>>>>>> origin/login:fitness2021/app/src/main/AndroidManifest.xml
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Fitness2021">
+        <activity
+            android:name=".Register"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".login"
+            android:exported="true" />
+        <activity
+<<<<<<< HEAD:Fitness2/app/src/main/AndroidManifest.xml
+            android:name=".ui.moments.MomentDetailsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.moments.AddMomentActivity"
+            android:exported="true"
+            android:label="Add Moment" />
+        <activity
+            android:name=".ui.exercise.SecondActivity_exercise"
+            android:exported="true"
+            android:label="secActivity" />
+        <activity
+            android:name=".ui.exercise.ThirdActivity_info"
+            android:exported="true"
+            android:label="ThirdInfo" />
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
+        -->
+        <activity
+            android:name=".ui.MainActivity"
+            android:label="@string/app_name">
+=======
+            android:name=".MainActivity"
+            android:exported="true">
+>>>>>>> origin/login:fitness2021/app/src/main/AndroidManifest.xml
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+    </application>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+</manifest>

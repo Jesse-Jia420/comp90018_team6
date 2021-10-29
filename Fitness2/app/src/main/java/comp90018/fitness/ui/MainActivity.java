@@ -1,10 +1,6 @@
 package comp90018.fitness.ui;
 
-import android.Manifest;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -16,9 +12,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import comp90018.fitness.R;
 import comp90018.fitness.databinding.ActivityMainBinding;
-import comp90018.fitness.ui.moments.AddMomentActivity;
 
-import static comp90018.fitness.ui.moments.placeholder.PlaceholderContent.getFirebaseData;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -40,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.Moments, R.id.navigation_home, R.id.map)
+                R.id.Moments, R.id.exercise, R.id.map)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);

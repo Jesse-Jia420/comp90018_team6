@@ -1,30 +1,26 @@
 package comp90018.fitness.ui.moments;
 
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
-import android.content.Intent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
-
-import comp90018.fitness.MainActivity;
-import comp90018.fitness.R;
-import comp90018.fitness.databinding.FragmentItemBinding;
-import comp90018.fitness.ui.moments.placeholder.PlaceholderContent;
-import comp90018.fitness.ui.moments.placeholder.PlaceholderContent.PlaceholderItem;
-//import comp90018.fitness.ui.moments.databinding.FragmentItemBinding;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import comp90018.fitness.R;
+import comp90018.fitness.databinding.FragmentItemBinding;
+import comp90018.fitness.ui.moments.placeholder.PlaceholderContent.PlaceholderItem;
+
+//import comp90018.fitness.ui.moments.databinding.FragmentItemBinding;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link PlaceholderItem}.
