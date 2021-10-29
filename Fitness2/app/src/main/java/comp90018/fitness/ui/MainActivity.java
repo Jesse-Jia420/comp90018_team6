@@ -1,5 +1,6 @@
 package comp90018.fitness.ui;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -24,18 +25,12 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
 
-    private String TAG = "First Demo";
-    public static String MESSAGE = "Message";
-    public static int MESSAGE_RECEIVE = 1;
+//    private Button mButton;
 
-    /* end of exercise changes */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        /* retrive firebase data */
-        getFirebaseData();
 
         /* setting bindings for the activity */
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -51,23 +46,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-        /* add moment button function */
-        Button button = findViewById(R.id.addMoment);
-        button.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // 给bnt1添加点击响应事件
-                Intent intent = new Intent(MainActivity.this, AddMomentActivity.class);
-                //启动
-                startActivity(intent);
-            }
-        });
-
-
     }
-
-
 
 
 

@@ -15,18 +15,19 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/default_user_avatar" />
+
     <TextView
         android:id="@+id/author_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/author_avatar"
         android:layout_alignBottom="@+id/author_avatar"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="10dp"
         android:layout_toRightOf="@+id/author_avatar"
         android:gravity="center"
-        android:textSize="18dp"
+        android:text="Default Author Name"
         android:textColor="#000000"
-        android:text="Default Author Name"/>
+        android:textSize="18dp" />
 
     <ScrollView android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -75,6 +76,16 @@
                 android:layout_marginTop="20dp"
                 android:text="10-01" />
 
+            <View
+                android:id="@+id/boundary_line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/moment_detail_time"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="#a8a8a8" />
+
             <TextView
                 android:id="@+id/moment_detail_comment_num"
                 android:layout_width="wrap_content"
@@ -94,11 +105,11 @@
             <LinearLayout
                 android:id="@+id/moment_add_comment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_below="@+id/moment_detail_comment_num"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="5dp">
+                android:layout_marginRight="10dp">
 
                 <EditText
                     android:id="@+id/moment_add_comment_edit"
@@ -106,8 +117,8 @@
                     android:inputType="text"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="4"
-                    android:background="@color/teal_700"
+                    android:layout_weight="5"
+                    android:background="@drawable/translucent_avatar"
                     android:hint="Add a comment"
                     android:paddingLeft="10dp" />
 
@@ -117,7 +128,8 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="1"
-                    android:text="Send">
+                    android:backgroundTintMode="multiply"
+                    android:background="@drawable/ic_moments_send">
 
                 </Button>
             </LinearLayout>
@@ -129,6 +141,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/moment_add_comment"
                 android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 tools:listitem="@layout/comment_item" />
         </RelativeLayout>
     </ScrollView>

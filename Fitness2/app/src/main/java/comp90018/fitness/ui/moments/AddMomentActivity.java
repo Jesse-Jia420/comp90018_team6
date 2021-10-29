@@ -6,19 +6,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -48,9 +54,13 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import comp90018.fitness.BuildConfig;
+import comp90018.fitness.MainActivity;
 import comp90018.fitness.R;
 import comp90018.fitness.ui.moments.placeholder.PlaceholderContent;
 
@@ -58,8 +68,10 @@ public class AddMomentActivity extends AppCompatActivity {
 
     private static final String USER_ID = "ASDASXCIWEWQNADS";
     private static final int PICK_IMAGE_REQUEST = 1;
+    private static final String TAG = "";
     private Button mButtonChooseImage;
-    private Button mButtonUpload;
+    private Button mButtonTakePhoto;
+//    private Button mButtonUpload;
     private Button mButtonSubmit;
     private ProgressBar mProgressBar;
     private EditText mTitle;
@@ -94,8 +106,15 @@ public class AddMomentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_moment);
 
+        //跳转相机动态权限
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+            StrictMode.setVmPolicy(builder.build());
+        }
+
         mButtonChooseImage = findViewById(R.id.button_choose_image);
-        mButtonUpload = findViewById(R.id.button_upload);
+        mButtonTakePhoto = findViewById(R.id.button_choose_image_photo);
+//        mButtonUpload = findViewById(R.id.button_upload);
         mButtonSubmit = findViewById(R.id.button_submit);
         mProgressBar = findViewById(R.id.progress_bar);
 
@@ -117,12 +136,18 @@ public class AddMomentActivity extends AppCompatActivity {
                 openFileChooser();
             }
         });
-        mButtonUpload.setOnClickListener(new View.OnClickListener(){
+        mButtonTakePhoto.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                uploadFile();
+                openCamera();
             }
         });
+//        mButtonUpload.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View v){
+//                uploadFile();
+//            }
+//        });
         mButtonSubmit.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -172,8 +197,12 @@ public class AddMomentActivity extends AppCompatActivity {
 
     }
 
-
-
+    private static String[] PERMISSIONS_STORAGE = {Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA};
+    private Uri ImageUri;
+    public static final int TAKE_PHOTO = 101;
+    public static final int TAKE_CAMARA = 100;
 
     private void openFileChooser(){
         Intent intent = new Intent();
@@ -185,15 +214,81 @@ public class AddMomentActivity extends AppCompatActivity {
     }
 
 
+    public int verifyPermissions(Activity activity, java.lang.String permission) {
+        int Permission = ActivityCompat.checkSelfPermission(activity, permission);
+        if (Permission == PackageManager.PERMISSION_GRANTED) {
+            Log.i(TAG, "已经同意权限");
+            return 1;
+        } else {
+            Log.i(TAG, "没有同意权限");
+            return 0;
+        }
+    }
+    private void openCamera(){
+        if (verifyPermissions(AddMomentActivity.this, PERMISSIONS_STORAGE[2]) == 0) {
+            Log.i(TAG, "提示是否要授权");
+            ActivityCompat.requestPermissions(AddMomentActivity.this, PERMISSIONS_STORAGE, 3);
+        } else {
+            //已经有权限
+            //创建File对象，用于存储拍照后的图片
+//        File outputImage = new File(getExternalCacheDir(), "outputImage.jpg");
+            File outputImage = new File(getExternalCacheDir(), System.currentTimeMillis() + ".jpg");
+            if (outputImage.exists()) {
+                outputImage.delete();
+            } else {
+                try {
+                    outputImage.createNewFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            //判断SDK版本高低，ImageUri方法不同
+            if (Build.VERSION.SDK_INT >= 24) {
+                ImageUri = FileProvider.getUriForFile(AddMomentActivity.this, BuildConfig.APPLICATION_ID + ".provider", outputImage);
+            } else {
+                ImageUri = Uri.fromFile(outputImage);
+            }
+
+            //启动相机程序
+            Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, ImageUri);
+            startActivityForResult(intent, TAKE_PHOTO);
+        }
+
+    }
+
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK){
-            if(data.getClipData() != null){
-                Toast.makeText(AddMomentActivity.this, "Selected Multiple Images", Toast.LENGTH_SHORT).show();
-                int totalItemsSelected = data.getClipData().getItemCount();
-                for (int i = 0; i < totalItemsSelected; i++) {
-                    Uri fileUri = data.getClipData().getItemAt(i).getUri();
+        if((requestCode == TAKE_PHOTO || requestCode == RESULT_LOAD_IMAGE) && resultCode == RESULT_OK){
+//            mImageUriList.clear();
+            imgUrlList.clear();
+            if(requestCode == TAKE_PHOTO){
+                ImageView iv = new ImageView(getApplicationContext());
+                iv.setId(currentImgIndex);
+                mUploadImgList.addView(iv);
+                currentImgIndex++;
+                mImageUriList.add(ImageUri);
+                ivList.add(iv);
+            } else if(requestCode == RESULT_LOAD_IMAGE){
+                if(data.getClipData() != null){
+                    Toast.makeText(AddMomentActivity.this, "Selected Multiple Images", Toast.LENGTH_SHORT).show();
+                    int totalItemsSelected = data.getClipData().getItemCount();
+                    for (int i = 0; i < totalItemsSelected; i++) {
+                        Uri fileUri = data.getClipData().getItemAt(i).getUri();
+                        ImageView iv = new ImageView(getApplicationContext());
+                        iv.setId(currentImgIndex);
+                        mUploadImgList.addView(iv);
+                        currentImgIndex++;
+                        mImageUriList.add(fileUri);
+                        ivList.add(iv);
+                    }
+                }
+                else if (data.getData() != null){
+                    Toast.makeText(AddMomentActivity.this, "Selected Single Image", Toast.LENGTH_SHORT).show();
+                    Uri fileUri = data.getData();
                     ImageView iv = new ImageView(getApplicationContext());
                     iv.setId(currentImgIndex);
                     mUploadImgList.addView(iv);
@@ -202,17 +297,6 @@ public class AddMomentActivity extends AppCompatActivity {
                     ivList.add(iv);
                 }
             }
-            else if (data.getData() != null){
-                Toast.makeText(AddMomentActivity.this, "Selected Single Image", Toast.LENGTH_SHORT).show();
-                Uri fileUri = data.getData();
-                ImageView iv = new ImageView(getApplicationContext());
-                iv.setId(currentImgIndex);
-                mUploadImgList.addView(iv);
-                currentImgIndex++;
-                mImageUriList.add(fileUri);
-                ivList.add(iv);
-            }
-
 
             for(int i=0; i<mImageUriList.size(); i++){
                 Glide.with(this)
@@ -235,6 +319,7 @@ public class AddMomentActivity extends AppCompatActivity {
                 constraintSet.connect(ivList.get(i).getId(), ConstraintSet.BOTTOM, ivList.get(i-1).getId(), ConstraintSet.BOTTOM, 0);
                 constraintSet.applyTo(constraintLayout);
             }
+            uploadFile();
 
         }
     }
@@ -265,11 +350,10 @@ public class AddMomentActivity extends AppCompatActivity {
                                     public void onSuccess(Uri uri) {
                                         Uri downloadUrl = uri;
                                         imgUrlList.add(downloadUrl.toString());
-//                                    Upload upload = new Upload(mEditTextFileName.getText().toString().trim(), downloadUrl.toString());
-//                                    mDatabaseRef.collection("uploads_image").add(upload);
                                     }
                                 });
-                                Toast.makeText(AddMomentActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
+                                mButtonSubmit.setEnabled(true);
+                                mButtonSubmit.setTextColor(0xFFFFFFFF);
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -281,6 +365,11 @@ public class AddMomentActivity extends AppCompatActivity {
                         .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                                Toast.makeText(AddMomentActivity.this, "Uploading now", Toast.LENGTH_SHORT).show();
+
+                                mButtonSubmit.setEnabled(false);
+                                mButtonSubmit.setTextColor(0xFFD0EFC6);
+
                                 double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
                                 mProgressBar.setProgress((int) progress);
                             }
