@@ -278,37 +278,6 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
         l = bottomSheetDialog.findViewById(R.id.myFriendList);
         ShareLocationList shareLocationList = new ShareLocationList(getActivity(), AllNames, AllImageIds);
         l.setAdapter(shareLocationList);
-//        l.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//                builder.setMessage("Are you sure to share current location with " +
-//                        parent.getItemAtPosition(position).toString() + " ?");
-//                builder.setCancelable(true);
-//
-//                builder.setPositiveButton(
-//                        "Yes",
-//                        new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int id) {
-//                                dialog.cancel();
-//                                Log.d(TAG, String.valueOf(position));
-//                                shareLocation(position);
-//
-//                            }
-//                        });
-//
-//                builder.setNegativeButton(
-//                        "No",
-//                        new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int id) {
-//                                dialog.cancel();
-//                            }
-//                        });
-//
-//                AlertDialog dialog = builder.create();
-//                dialog.show();
-//            }
-//        });
 
         bottomSheetDialog.show();
     }

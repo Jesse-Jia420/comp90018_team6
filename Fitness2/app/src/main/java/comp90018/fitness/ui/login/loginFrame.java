@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -47,7 +48,7 @@ public class loginFrame extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         g_view = view;
         createAccount =view.findViewById(R.id.createNewAccount);
-        requireActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        requireActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         inputEmail = view.findViewById(R.id.email);
         inputPassword = view.findViewById(R.id.password);
