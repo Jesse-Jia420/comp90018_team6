@@ -6,8 +6,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
 
@@ -33,6 +31,8 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -67,6 +67,7 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
     private static ArrayList<Integer> imageIds = new ArrayList<>();
     public static ArrayList<Map<String, Object>> friends = new ArrayList<>();
     private AvailableFriendList availableFriendList;
+    private Polyline polyline;
 
     @Nullable
     @Override
@@ -160,8 +161,11 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
                     l.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            if (polyline != null) {
+                                polyline.remove();
+                            }
                             LatLng latLng = new LatLng((Double) friends.get(position).get("lat"), (Double) friends.get(position).get("long"));
-
+                            LatLng start = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                             if (friendMarker == null) {
                                 MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("Your friend is here!");
                                 friendMarker = map.addMarker(markerOptions);
@@ -169,6 +173,14 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
                             map.animateCamera(CameraUpdateFactory.newLatLng(latLng));
                             map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
                             friendMarker.setPosition(latLng);
+                            if (currentLocation != null){
+                                new FindNavigationRoute(start, latLng, new RouteListener() {
+                                    @Override
+                                    public void drawPath(PolylineOptions polyLine) {
+                                        polyline = map.addPolyline(polyLine);
+                                    }
+                                }).execute();
+                            }
                         }
                     });
                 } else {
@@ -338,7 +350,7 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.map = googleMap;
-        updateLocation();
+//        updateLocation();
 
     }
 
