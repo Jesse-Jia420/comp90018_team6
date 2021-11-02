@@ -74,8 +74,13 @@ public class ShareLocationList extends ArrayAdapter {
 
         name.setText(names.get(position));
         avatar.setImageResource(imageId.get(position));
-        if ((Boolean) FindFriendsFragment.friends.get(position).get("locationShared")){
+        if (FindFriendsFragment.friends.get(position).get("locationShared") != null &&
+                (Boolean) FindFriendsFragment.friends.get(position).get("locationShared")){
             button.setText("Stop Sharing");
+        }
+        if (FindFriendsFragment.friends.get(position).get("locationShared") != null &&
+                !(Boolean) FindFriendsFragment.friends.get(position).get("locationShared")){
+            button.setText("Share");
         }
         button.setOnClickListener(new View.OnClickListener() {
             @Override

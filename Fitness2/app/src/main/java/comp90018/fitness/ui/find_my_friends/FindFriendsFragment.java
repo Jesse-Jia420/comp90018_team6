@@ -6,6 +6,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -35,6 +37,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -45,6 +48,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import comp90018.fitness.R;
@@ -69,6 +73,7 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
     public static ArrayList<Map<String, Object>> friends = new ArrayList<>();
     private AvailableFriendList availableFriendList;
     private Polyline polyline;
+    private static String UID;
 
     @Nullable
     @Override
@@ -85,25 +90,65 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         SharedPreferences prefs = getActivity().getSharedPreferences("MyPrefs", getActivity().MODE_PRIVATE);
-        String UID = prefs.getString("UID", "none");
+        UID = prefs.getString("UID", "none");
         Log.d("hello", UID);
-//        SupportMapFragment mapFragment =
-//                (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-//        if (mapFragment != null) {
-//            mapFragment.getMapAsync(MapFragment.this);
-//        }
 
+        if (UID.equals("none")){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("You haven't logged in, please log in first.");
+            builder.setCancelable(true);
+
+            builder.setPositiveButton(
+                    "ok",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+
+        Button LocateButton = (Button) view.findViewById(R.id.locate);
+        LocateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateLocation();
+                updateFriends();
+                if (availableFriendList != null){
+                    availableFriendList.notifyDataSetChanged();
+                }
+                updateSharedLocation();
+            }
+        });
+
+        Button shareButton = (Button) view.findViewById(R.id.shareLocation);
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                shareLocationDialog(view);
+            }
+        });
 
         // Create a new user with a first and last name
 //        Map<String, Object> user = new HashMap<>();
-//        Map<String, Object> friend = new HashMap<>();
-//        ArrayList<Map<String, Object>> friends = new ArrayList<>();
-//        friend.put("name", "Bob");
-//        friend.put("lat", -37.816178);
-//        friend.put("long", 145.015345);
-//        friends.add(friend);
-//        user.put("name", "Ada");
-//        user.put("friends", friends);
+//        Map<String, Object> friend1 = new HashMap<>();
+//        Map<String, Object> friend2 = new HashMap<>();
+//        ArrayList<Map<String, Object>> friendsData = new ArrayList<>();
+//        friend1.put("id", "AQHqhY7NNEb7b0KzhxHu");
+//        friend1.put("name", "Bob");
+//        friend1.put("lat", -37.816178);
+//        friend1.put("long", 145.015345);
+//        friend2.put("id", "XxuLTJ6E27szh8pVQ4N0");
+//        friend2.put("name", "Emma");
+//        friend2.put("lat", -37.7571);
+//        friend2.put("long", 145.0307);
+//        friendsData.add(friend1);
+//        friendsData.add(friend2);
+//        user.put("friends", friendsData);
+//
+//        db.collection("users").document(UID).set(user);
 
         // Add a new document with a generated ID
 //        db.collection("users")
@@ -121,27 +166,23 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
 //                    }
 //                });
 
-        Button LocateButton = (Button) view.findViewById(R.id.locate);
-        LocateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                updateLocation();
-                updateFriends();
-                availableFriendList.notifyDataSetChanged();
-                updateSharedLocation();
-            }
-        });
+        DocumentReference docRef = db.collection("users").document(UID);
 
-        Button shareButton = (Button) view.findViewById(R.id.shareLocation);
-        shareButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                shareLocationDialog(view);
-            }
-        });
+        Map<String, Object> friend1 = new HashMap<>();
+        Map<String, Object> friend2 = new HashMap<>();
+        ArrayList<Map<String, Object>> friendsData = new ArrayList<>();
+        friend1.put("id", "AQHqhY7NNEb7b0KzhxHu");
+        friend1.put("name", "dummy friend 1");
+        friend1.put("lat", -37.816178);
+        friend1.put("long", 145.015345);
+        friend2.put("id", "XxuLTJ6E27szh8pVQ4N0");
+        friend2.put("name", "dummy friend 2");
+        friend2.put("lat", -37.7571);
+        friend2.put("long", 145.0307);
+        friendsData.add(friend1);
+        friendsData.add(friend2);
+        docRef.update("friends", friendsData);
 
-
-        DocumentReference docRef = db.collection("users").document("Rve0AFkG4XjQtGhJmQkV");
         docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot,
@@ -231,7 +272,7 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                         ArrayList<Map<String, Object>> friends = (ArrayList<Map<String, Object>>) document.get("friends");
                         for (Map<String, Object> friend : friends){
-                            if (((String) friend.get("id")).equals("Rve0AFkG4XjQtGhJmQkV")){
+                            if (((String) friend.get("id")).equals(UID)){
                                 Log.d(TAG, "12");
                                 friend.put("lat", currentLocation.getLatitude());
                                 friend.put("long", currentLocation.getLongitude());
@@ -247,7 +288,7 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
             }
         });
 
-        DocumentReference docRef2 = db.collection("users").document("Rve0AFkG4XjQtGhJmQkV");
+        DocumentReference docRef2 = db.collection("users").document(UID);
         friends.get(position).put("locationShared", true);
         docRef2.update("friends", friends);
     }
@@ -263,7 +304,7 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                         ArrayList<Map<String, Object>> friends = (ArrayList<Map<String, Object>>) document.get("friends");
                         for (Map<String, Object> friend : friends){
-                            if (((String) friend.get("id")).equals("Rve0AFkG4XjQtGhJmQkV")){
+                            if (((String) friend.get("id")).equals(UID)){
                                 friend.remove("lat");
                                 friend.remove("long");
                             }
@@ -278,7 +319,7 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
             }
         });
 
-        DocumentReference docRef2 = db.collection("users").document("Rve0AFkG4XjQtGhJmQkV");
+        DocumentReference docRef2 = db.collection("users").document(UID);
         friends.get(position).put("locationShared", false);
         docRef2.update("friends", friends);
 
@@ -299,7 +340,7 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
 
     private void updateSharedLocation(){
         for (Map<String, Object> friend : friends){
-            if ((Boolean) friend.get("locationShared")){
+            if (friend.get("locationShared") != null && (Boolean) friend.get("locationShared")){
                 DocumentReference docRef = db.collection("users").document((String) friend.get("id"));
                 docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -310,7 +351,7 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
                                 Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                                 ArrayList<Map<String, Object>> friends2 = (ArrayList<Map<String, Object>>) document.get("friends");
                                 for (Map<String, Object> friend2 : friends2){
-                                    if (((String) friend2.get("id")).equals("Rve0AFkG4XjQtGhJmQkV")){
+                                    if (((String) friend2.get("id")).equals(UID)){
                                         friend2.put("lat", currentLocation.getLatitude());
                                         friend2.put("long", currentLocation.getLongitude());
                                     }

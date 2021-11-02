@@ -18,6 +18,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import comp90018.fitness.R;
 
@@ -85,11 +90,22 @@ public class RegisterActivity extends AppCompatActivity {
             progressDialog.setTitle("Registration");
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();
-
             fAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()){
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        Map<String, Object> user = new HashMap<>();
+//                        Map<String, Object> friend = new HashMap<>();
+                        ArrayList<Map<String, Object>> friends = new ArrayList<>();
+//                        friends.add(friend);
+                        user.put("friends", friends);
+                        user.put("name", inputFullName.getText().toString());
+                        user.put("gender", inputGender.getText().toString());
+                        user.put("height", inputHeight.getText().toString());
+                        user.put("weight", inputWeight.getText().toString());
+                        db.collection("users").document(fAuth.getUid()).set(user);
+
                         progressDialog.dismiss();
                         sendUserToNextActivity();
                         Toast.makeText(RegisterActivity.this,"Login Successful",Toast.LENGTH_SHORT).show();
