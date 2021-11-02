@@ -2,7 +2,9 @@ package comp90018.fitness.ui.login;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +56,10 @@ public class loginFrame extends Fragment {
         inputPassword = view.findViewById(R.id.password);
         fAuth = FirebaseAuth.getInstance();
         myUser =fAuth.getCurrentUser();
+        SharedPreferences prefs = getContext().getSharedPreferences("MyPrefs", getContext().MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("UID", fAuth.getUid());
+        editor.apply();
         progressDialog = new ProgressDialog(view.getContext());
         LoginBtn =view.findViewById(R.id.loginBtn);
 

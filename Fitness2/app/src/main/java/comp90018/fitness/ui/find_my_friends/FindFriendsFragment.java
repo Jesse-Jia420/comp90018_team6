@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.Manifest;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 
@@ -77,13 +78,15 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         fetchLocation();
-
         return inflater.inflate(R.layout.fragment_find_friends, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        SharedPreferences prefs = getActivity().getSharedPreferences("MyPrefs", getActivity().MODE_PRIVATE);
+        String UID = prefs.getString("UID", "none");
+        Log.d("hello", UID);
 //        SupportMapFragment mapFragment =
 //                (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
 //        if (mapFragment != null) {
