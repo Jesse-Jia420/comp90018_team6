@@ -61,6 +61,35 @@ public class Pedometer implements SensorEventListener {
                 latitude = location.getLatitude();
 
             }
+
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 8, new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+
+                    longitude = location.getLongitude();
+                    latitude = location.getLatitude();
+                    if(preLatitude!=0){
+                        float[] results = new float[1];
+                        Location.distanceBetween(preLatitude,preLongitude,latitude,longitude,results);
+                        outdistance = outdistance + results[0];
+                    }
+                    preLatitude = latitude;
+                    preLongitude = longitude;
+                }
+                @Override
+                public void onStatusChanged(String s, int i, Bundle bundle) {
+                }
+                @Override
+                public void onProviderEnabled(String provider) {
+
+
+
+                }
+                @Override
+                public void onProviderDisabled(String s) {
+
+                }
+            });
         }
         else {
             LocationListener locationListener = new LocationListener() {

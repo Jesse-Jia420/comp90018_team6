@@ -54,7 +54,7 @@ public class SecondActivity_exercise extends AppCompatActivity{
 
 
 
-    private String TAG = "Second Demo";
+    private String TAG = "Second Exercise";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,14 +125,17 @@ public class SecondActivity_exercise extends AppCompatActivity{
     public void onMessageEventServer(PedometerMessage event) {
         runTime = (double)(SystemClock.elapsedRealtime() - startTime); //unit:ms
         mStepDetect = event.getStepDetect();
+        mStepDetect = 10;
         miDistance = getStepDistance(gender,height)*mStepDetect;
         moDistance = event.getOutDistance();
         cal = getCal(weight,runTime,miDistance, moDistance);
 
         stepDetect.setText(String.valueOf(mStepDetect));
-        distance.setText(String.valueOf(miDistance));
-        odistance.setText(String.valueOf(moDistance));
-        calorie.setText(String.format("%.2f",cal));
+        distance.setText(String.valueOf(miDistance) + "m");
+        odistance.setText(String.format("%.2f",moDistance) + "m");
+        calorie.setText(String.format("%.2f",cal) + "kcal");
+
+       // calorie.setText(String.valueOf(height.toString().trim()));
     }
 
     public double getCal(Double weight, Double time, Double miDistance, Double moDistance) {
@@ -142,22 +145,27 @@ public class SecondActivity_exercise extends AppCompatActivity{
             runDistance = moDistance;
         }
         else{
-            runDistance = 10000; //demo
+            runDistance = miDistance; //demo
         }
-        double K = (time/1000/60)/(runDistance/400);
-        cal = weight*(time/3600)*K;
-
+        if(runDistance > 0)
+        {
+            double K = 30/((time/1000/60)/(runDistance/400));
+            cal = weight*(time/3600000)*K;
+        }
+        else{
+            cal = 0;
+        }
         return cal;
 
     }
 
     public static Double getStepDistance(String gender, Double height){
         Double stepDistance = 0.0;
-        if(gender == "MALE"){
-            stepDistance = 0.415*height/100;
+        if(gender.equals("MALE")){
+            stepDistance = 0.415*height;
         }
-        else if(gender == "FEMALE"){
-            stepDistance = 0.413*height/100;
+        else{
+            stepDistance = 0.413*height;
         }
         return stepDistance;
     }

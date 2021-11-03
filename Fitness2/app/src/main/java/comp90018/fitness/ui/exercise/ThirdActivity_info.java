@@ -72,7 +72,7 @@ public class ThirdActivity_info extends AppCompatActivity implements View.OnClic
                             info_height.setText("cmb");
                         }
                         info_gender.setText(gender);
-                        info_height.setText(height.toString() + "cm");
+                        info_height.setText(height.toString() + "m");
                         info_weight.setText(weight.toString() + "kg");
                     }
                 });
@@ -104,7 +104,7 @@ public class ThirdActivity_info extends AppCompatActivity implements View.OnClic
                 height = Double.valueOf(edit_height.getText().toString());
                 weight = Double.valueOf(edit_weight.getText().toString());
                 info_gender.setText(gender);
-                info_height.setText(height.toString().trim() + "cm");
+                info_height.setText(height.toString().trim() + "m");
                 info_weight.setText(weight.toString().trim() + "kg");
 
         }

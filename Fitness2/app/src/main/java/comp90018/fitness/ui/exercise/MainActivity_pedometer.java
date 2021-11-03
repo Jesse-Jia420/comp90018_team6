@@ -34,7 +34,7 @@ public class MainActivity_pedometer extends Fragment {
     FirebaseFirestore db;
 
 
-    private String TAG = "First Demo";
+    private String TAG = "Exercise Home";
     public static String MESSAGE = "Message";
     public static int MESSAGE_RECEIVE = 1;
 
