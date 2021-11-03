@@ -165,7 +165,7 @@ public class ItemFragment extends Fragment implements MyItemRecyclerViewAdapter.
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
-                                    String distance = calcDistance((double) document.get("mPosition_Latitude"),(double) document.get("mPosition_Longitude"));
+                                    String distance = calcDistance(Double.valueOf(document.get("mPosition_Latitude").toString()),Double.valueOf(document.get("mPosition_Longitude").toString()));
                                     ArrayList<String> imgList = (ArrayList<String>) document.get("mImageUrl");
                                     String imgUrlTemp = "";
                                     if (imgList.size() != 0) {
