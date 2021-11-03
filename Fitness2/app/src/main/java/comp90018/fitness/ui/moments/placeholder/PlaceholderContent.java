@@ -60,14 +60,6 @@ public class PlaceholderContent implements MyItemRecyclerViewAdapter.ViewHolder.
 //                });
 //    }
 
-    public static String calcDistance() {
-        return "350m";
-    }
-
-    public static String calcTime() {
-        return "27 min ago";
-    }
-
 
     /**
      * An array of sample (placeholder) items.

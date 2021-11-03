@@ -42,6 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/edit_title_edit"
             android:hint="Add text"
+            android:textSize="14dp"
             android:minHeight="150dp" />
 
         <Button
@@ -79,11 +80,26 @@
             android:layout_below="@+id/upload_img_area"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"/>
 
-<!--        <TextView-->
-<!--            android:id="@+id/position_text_view"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="GEO TEST" />-->
+        <ImageView
+            android:id="@+id/ic_position"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_below="@+id/progress_bar"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/ic_addmoments_location" />
+
+        <TextView
+            android:id="@+id/position_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/progress_bar"
+            android:layout_alignTop="@+id/ic_position"
+            android:layout_alignBottom="@+id/ic_position"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/ic_position"
+            android:gravity="center"
+            android:text="GEO TEST" />
+
 <!--        <Button-->
 <!--            android:id="@+id/button_upload"-->
 <!--            android:layout_width="wrap_content"-->

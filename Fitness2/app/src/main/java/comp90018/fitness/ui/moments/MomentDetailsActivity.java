@@ -49,8 +49,11 @@ public class MomentDetailsActivity extends AppCompatActivity {
 
     private static final String TAG = "MomentDetailsActivity";
 
+
     private String POST_ID;
     private String USER_ID = "ASDASXCIWEWQNADS";
+    private static String USER_NAME = "Default Name";
+    private static String USER_AVATAR = "";
 
 
     private ViewPager mLoopPager;
@@ -61,6 +64,8 @@ public class MomentDetailsActivity extends AppCompatActivity {
     private TextView mTime;
     private ImageView mAuthorAvatar;
     private TextView mAuthorName;
+    private TextView mCommentNum;
+
 
     private ListView mCommentsList;
     private ArrayList<CommentsItem> data;
@@ -119,10 +124,37 @@ public class MomentDetailsActivity extends AppCompatActivity {
             POST_ID = item.id;
 
         }
+        if(! bundle.getString("UID").equals("none")){
+            USER_ID = bundle.getString("UID");
+
+            final FirebaseFirestore db= FirebaseFirestore.getInstance();
+            AddMomentActivity that;
+            DocumentReference docRef = db.collection("users").document(USER_ID);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                private static final String TAG = "";
+
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                            USER_AVATAR = document.get("avatarUrl").toString();
+                            USER_NAME = document.get("name").toString();
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
+                }
+            });
+        }else{
+            Toast.makeText(MomentDetailsActivity.this, "You need to login first!", Toast.LENGTH_SHORT).show();
+            this.finish();
+        }
 
         mLoopPagerAdapter.setData(imgUrlList);
-
-
         mLoopPagerAdapter.notifyDataSetChanged();
     }
 
@@ -138,13 +170,16 @@ public class MomentDetailsActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            int num = 0;
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 if(document.get("postId").toString().equals(postId)){
-                                    CommentsItem tempItem = new CommentsItem(document.getId(), document.get("content").toString(), document.get("time").toString(), document.get("postId").toString(),document.get("userId").toString());
+                                    CommentsItem tempItem = new CommentsItem(document.getId(), document.get("content").toString(), document.get("time").toString(), document.get("postId").toString(),document.get("userId").toString(), document.get("userName").toString(),document.get("userAvatar").toString());
                                     commentList.add(tempItem);
                                     addItem(tempItem);
+                                    num ++;
                                 }
                             }
+                            mCommentNum.setText(num + " comments");
                             mCommentsListAdapter.setData(commentList);
                             mCommentsListAdapter.notifyDataSetChanged();
                         } else {
@@ -164,6 +199,7 @@ public class MomentDetailsActivity extends AppCompatActivity {
         mTime = this.findViewById(R.id.moment_detail_time);
         mAuthorAvatar = this.findViewById(R.id.author_avatar);
         mAuthorName = this.findViewById(R.id.author_name);
+        mCommentNum = this.findViewById(R.id.moment_detail_comment_num);
 
         mRecycleView = this.findViewById(R.id.moment_comments_list);
         mCommentsListAdapter = new ListViewAdapter(this);
@@ -182,7 +218,7 @@ public class MomentDetailsActivity extends AppCompatActivity {
     }
 
     private void addComment() {
-        CommentsItem commentsItem = new CommentsItem(mAddCommentEdit.getText().toString().trim(), POST_ID, USER_ID);
+        CommentsItem commentsItem = new CommentsItem(mAddCommentEdit.getText().toString().trim(), POST_ID, USER_ID, USER_NAME, USER_AVATAR);
         mDatabaseRef.collection("comment_test").add(commentsItem);
         mAddCommentEdit.setText("");
         mAddCommentEdit.clearFocus();
@@ -201,24 +237,30 @@ public class MomentDetailsActivity extends AppCompatActivity {
         public String time;
         public String postId;
         public String userId;
+        public String userName;
+        public String userAvatar;
 
         public CommentsItem() {
         }
 
-        public CommentsItem(String id, String content, String time, String post_id, String user_id){
+        public CommentsItem(String id, String content, String time, String post_id, String user_id, String user_name, String user_avatar){
             this.id = id;
             this.content = content;
             this.time = time;
             this.postId = post_id;
             this.userId = user_id;
+            this.userName = user_name;
+            this.userAvatar = user_avatar;
         }
 
-        public CommentsItem(String content, String post_id, String user_id){
+        public CommentsItem(String content, String post_id, String user_id, String user_name, String user_avatar){
 //            this.id = id;
             this.content = content;
             this.time = getTime();
             this.postId = post_id;
             this.userId = user_id;
+            this.userName = user_name;
+            this.userAvatar = user_avatar;
         }
 
         public CommentsItem[] newArray(int i) {

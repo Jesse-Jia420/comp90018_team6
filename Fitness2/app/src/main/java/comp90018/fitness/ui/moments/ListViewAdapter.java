@@ -37,7 +37,7 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.setUserName(mComments.get(position).userId);
+        holder.setUserName(mComments.get(position).userName);
         holder.setCommentContent(mComments.get(position).content);
         holder.setCommentTime(mComments.get(position).time);
     }

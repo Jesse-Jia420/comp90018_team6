@@ -3,8 +3,14 @@ package comp90018.fitness.ui.moments;
 import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,6 +36,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -42,21 +50,22 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import comp90018.fitness.BuildConfig;
 import comp90018.fitness.R;
 
 public class AddMomentActivity extends AppCompatActivity {
 
-    private static final String USER_ID = "ASDASXCIWEWQNADS";
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final String TAG = "";
     private Button mButtonChooseImage;
     private Button mButtonTakePhoto;
-//    private Button mButtonUpload;
     private Button mButtonSubmit;
     private ProgressBar mProgressBar;
     private EditText mTitle;
@@ -64,9 +73,9 @@ public class AddMomentActivity extends AppCompatActivity {
     private String avatarUrl = null;
     private ImageView mUserAvatar;
     private TextView mUserName;
-//    private double mLatitude;
-//    private double mLongitude;
-//    private TextView mPosition;
+    private double mLatitude;
+    private double mLongitude;
+    private TextView mPosition;
     private ConstraintLayout mUploadImgList;
     private String mAuthorId;
 
@@ -76,7 +85,7 @@ public class AddMomentActivity extends AppCompatActivity {
     private Uri mImageUri;
     private ArrayList<Uri> mImageUriList = new ArrayList<Uri>();
     private ArrayList<ImageView> ivList = new ArrayList<ImageView>();
-    private int currentImgIndex=0;
+    private int currentImgIndex = 0;
 
     private static final int RESULT_LOAD_IMAGE = 1;
 
@@ -84,6 +93,8 @@ public class AddMomentActivity extends AppCompatActivity {
     ConstraintSet constraintSet;
 
     private ArrayList<String> imgUrlList = new ArrayList<String>();
+
+    private FusedLocationProviderClient fusedLocationClient;
 
 
     @Override
@@ -99,43 +110,43 @@ public class AddMomentActivity extends AppCompatActivity {
 
         mButtonChooseImage = findViewById(R.id.button_choose_image);
         mButtonTakePhoto = findViewById(R.id.button_choose_image_photo);
-//        mButtonUpload = findViewById(R.id.button_upload);
         mButtonSubmit = findViewById(R.id.button_submit);
         mProgressBar = findViewById(R.id.progress_bar);
+
+        mButtonSubmit.setEnabled(false);
+        mButtonSubmit.setTextColor(0xFFFFFFFF);
 
         mTitle = findViewById(R.id.edit_title_edit);
         mContent = findViewById(R.id.edit_content_edit);
         mUserAvatar = findViewById(R.id.user_avatar);
         mUserName = findViewById(R.id.user_name);
-//        mPosition = findViewById(R.id.position_text_view);
+        mPosition = findViewById(R.id.position_text_view);
         mUploadImgList = findViewById(R.id.upload_img_list);
 
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
         mDatabaseRef = FirebaseFirestore.getInstance();
 
-        getUserInfo(USER_ID);
+        getUserInfo();
 
-        mButtonChooseImage.setOnClickListener(new View.OnClickListener(){
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        getUserPosition();
+
+        mButtonChooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 openFileChooser();
             }
         });
-        mButtonTakePhoto.setOnClickListener(new View.OnClickListener(){
+        mButtonTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 openCamera();
             }
         });
-//        mButtonUpload.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View v){
-//                uploadFile();
-//            }
-//        });
-        mButtonSubmit.setOnClickListener(new View.OnClickListener(){
+
+        mButtonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 submit();
             }
 
@@ -144,42 +155,96 @@ public class AddMomentActivity extends AppCompatActivity {
 
     }
 
-    private void submit() {
-        Post post = new Post(mTitle.getText().toString().trim(), mContent.getText().toString().trim(), imgUrlList, mUserName.getText().toString().trim(), avatarUrl, mAuthorId);
-        mDatabaseRef.collection("post_test").add(post);
-        this.finish();
-    }
-    private void getUserInfo(final String id){
-        mAuthorId = id;
+    private void getUserInfo() {
+        String USER_ID = "";
+        Bundle bundle = getIntent().getExtras();
+        if(! bundle.getString("UID").equals("none"))
+        {
+            //TODO here get the string stored in the string variable and do
+            // setText() on userName
+            USER_ID = bundle.getString("UID");
+            mAuthorId = USER_ID;
 
-        final FirebaseFirestore db= FirebaseFirestore.getInstance();
-        AddMomentActivity that;
-        that = this;
-        DocumentReference docRef = db.collection("user_test").document(id);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            private static final String TAG = "";
+            final FirebaseFirestore db= FirebaseFirestore.getInstance();
+            AddMomentActivity that;
+            that = this;
+            DocumentReference docRef = db.collection("users").document(mAuthorId);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                private static final String TAG = "";
 
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                             avatarUrl = document.get("avatarUrl").toString();
 //                            //show user info
                             mUserName.setText(document.get("name").toString());
                             Glide.with(that)
-                                    .load(avatarUrl).placeholder(R.drawable.ic_menu_moments)
+                                    .load(avatarUrl)
+                                    .circleCrop()
+                                    .placeholder(R.drawable.ic_menu_moments)
                                     .into(mUserAvatar);
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
                     } else {
-                        Log.d(TAG, "No such document");
+                        Log.d(TAG, "get failed with ", task.getException());
                     }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
                 }
-            }
-        });
+            });
+        }else{
+            Toast.makeText(AddMomentActivity.this, "You need to login first!", Toast.LENGTH_SHORT).show();
+            this.finish();
+        }
 
+    }
+
+    private void submit() {
+        Post post = new Post(mTitle.getText().toString().trim(), mContent.getText().toString().trim(), imgUrlList, mUserName.getText().toString().trim(), avatarUrl, mAuthorId, mLatitude, mLongitude);
+        mDatabaseRef.collection("post_test").add(post);
+        this.finish();
+    }
+
+
+    private void getUserPosition() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            ActivityCompat.requestPermissions(AddMomentActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
+            return;
+        }
+
+        fusedLocationClient.getLastLocation()
+                .addOnCompleteListener(new OnCompleteListener<Location>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Location> task) {
+                        Location location = task.getResult();
+                        if(location != null){
+                            mPosition.setText("");
+                            mPosition.setText( "Current Position: "+location.getLatitude()+" "+location.getLongitude());
+                            mLatitude = location.getLatitude();
+                            mLongitude = location.getLongitude();
+
+//                            //translate geo point into meaningful location
+//                            Geocoder geocoder = new Geocoder(AddMomentActivity.this);
+//                            try {
+//                                List<Address> mAddresses = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),3);
+//                                Address address = mAddresses.get(0);
+//                                CharArrayWriter mStringBuilder = null;
+//                                mStringBuilder.append(address.getAdminArea()).append(", ").append(address.getLocality()).append(", ").append(address.getCountryName());
+//                            }catch (Exception e){
+//                            }
+                        }
+                    }
+
+                });
     }
 
     private static String[] PERMISSIONS_STORAGE = {Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -194,7 +259,6 @@ public class AddMomentActivity extends AppCompatActivity {
         intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.setAction(Intent.ACTION_GET_CONTENT);
-//        startActivityForResult(intent, PICK_IMAGE_REQUEST);
         startActivityForResult(Intent.createChooser(intent, "Select Piscture"), RESULT_LOAD_IMAGE);
     }
 
@@ -350,10 +414,9 @@ public class AddMomentActivity extends AppCompatActivity {
                         .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-                                Toast.makeText(AddMomentActivity.this, "Uploading now", Toast.LENGTH_SHORT).show();
 
                                 mButtonSubmit.setEnabled(false);
-                                mButtonSubmit.setTextColor(0xFFD0EFC6);
+                                mButtonSubmit.setTextColor(0xFFFFFFFF);
 
                                 double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
                                 mProgressBar.setProgress((int) progress);

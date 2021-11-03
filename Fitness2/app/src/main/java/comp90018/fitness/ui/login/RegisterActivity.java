@@ -34,7 +34,8 @@ public class RegisterActivity extends AppCompatActivity {
     FirebaseUser myUser;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     ProgressDialog progressDialog;
-
+    String DEFAULT_AVATAR_URL_M = "https://www.clipartmax.com/png/full/405-4050774_avatar-icon-flat-icon-shop-download-free-icons-for-avatar-icon-flat.png";
+    String DEFAULT_AVATAR_URL_F = "https://www.clipartmax.com/png/small/319-3191408_female-avatar-illustration.png";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +105,11 @@ public class RegisterActivity extends AppCompatActivity {
                         user.put("gender", inputGender.getText().toString());
                         user.put("height", inputHeight.getText().toString());
                         user.put("weight", inputWeight.getText().toString());
+                        if (inputGender.getText().toString().contains("f") || inputGender.getText().toString().contains("F")){
+                            user.put("avatarUrl", DEFAULT_AVATAR_URL_F);
+                        }else {
+                            user.put("avatarUrl", DEFAULT_AVATAR_URL_M);
+                        }
                         db.collection("users").document(fAuth.getUid()).set(user);
 
                         progressDialog.dismiss();

@@ -16,7 +16,7 @@ public class Post {
     private double mPosition_Longitude;
     private String mAuthorId;
 
-    public Post(String title, String content, ArrayList<String> postImgUrl, String userName, String userImageUrl, String auhorId){
+    public Post(String title, String content, ArrayList<String> postImgUrl, String userName, String userImageUrl, String auhorId, double Latitude, double Longitude){
         if(title.trim().equals("")){
             title = "No Title";
         }else if(content.trim().equals("")){
@@ -30,8 +30,8 @@ public class Post {
         mImageUrlList = postImgUrl;
         mAuthorName = userName;
         mAuthorAvatarUrl = userImageUrl;
-//        mPosition_Latitude = Latitude;
-//        mPosition_Longitude = Longitude;
+        mPosition_Latitude = Latitude;
+        mPosition_Longitude = Longitude;
         mAuthorId = auhorId;
         mTime = getTime();
     }

@@ -21,24 +21,30 @@
         <entry key="..\:/Users/75938/Desktop/Study/Uni of Melbourne/2021 S2/COMP90018 Mobile Computing System/MC ass2/comp90018_team6/Fitness2/app/src/main/res/layout/fragment_home.xml" value="0.125" />
         <entry key="..\:/Users/75938/Desktop/Study/Uni of Melbourne/2021 S2/COMP90018 Mobile Computing System/MC ass2/comp90018_team6/Fitness2/app/src/main/res/layout/friend_item.xml" value="0.125" />
         <entry key="..\:/Users/75938/Desktop/Study/Uni of Melbourne/2021 S2/COMP90018 Mobile Computing System/MC ass2/comp90018_team6/Fitness2/app/src/main/res/menu/bottom_nav_menu.xml" value="0.14427083333333332" />
+        <entry key="app/src/main/res/drawable/ic_addmoments_location.xml" value="0.3723958333333333" />
         <entry key="app/src/main/res/drawable/ic_baseline_cloud_download_24.xml" value="0.15364583333333334" />
         <entry key="app/src/main/res/drawable/ic_baseline_expand_less_24.xml" value="0.15364583333333334" />
         <entry key="app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.15885416666666666" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.17395833333333333" />
         <entry key="app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.15364583333333334" />
         <entry key="app/src/main/res/drawable/side_nav_bar.xml" value="0.15364583333333334" />
+        <entry key="app/src/main/res/layout/activity_add_moment.xml" value="0.35572916666666665" />
         <entry key="app/src/main/res/layout/activity_find_friend.xml" value="0.18840579710144928" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.27541451819732643" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.18442401035903327" />
         <entry key="app/src/main/res/layout/activity_main2.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_moment_details.xml" value="0.33" />
         <entry key="app/src/main/res/layout/available_friend_list_row_item.xml" value="0.335" />
         <entry key="app/src/main/res/layout/blank_fragment.xml" value="0.16168478260869565" />
         <entry key="app/src/main/res/layout/chat_activity.xml" value="0.13496376811594202" />
+        <entry key="app/src/main/res/layout/comment_item.xml" value="0.1802536231884058" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.15729166666666666" />
         <entry key="app/src/main/res/layout/find_friends_bottom_sheet.xml" value="0.1375" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.14270833333333333" />
         <entry key="app/src/main/res/layout/fragment_find_friends.xml" value="0.125" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.14270833333333333" />
+        <entry key="app/src/main/res/layout/fragment_item.xml" value="0.4015625" />
+        <entry key="app/src/main/res/layout/fragment_item_list.xml" value="0.4015625" />
         <entry key="app/src/main/res/layout/fragment_item_list_dialog_list_dialog.xml" value="0.21784420289855072" />
         <entry key="app/src/main/res/layout/fragment_item_list_dialog_list_dialog_item.xml" value="0.21784420289855072" />
         <entry key="app/src/main/res/layout/fragment_maps.xml" value="0.16666666666666666" />
