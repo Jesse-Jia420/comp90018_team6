@@ -26,11 +26,11 @@
         <activity
             android:name=".ui.exercise.SecondActivity_exercise"
             android:exported="true"
-            android:label="secActivity" />
+            android:label="Exercise" />
         <activity
             android:name=".ui.exercise.ThirdActivity_info"
             android:exported="true"
-            android:label="ThirdInfo" />
+            android:label="Information" />
         <activity
             android:name=".ui.login.RegisterActivity"
             android:exported="true"/>

@@ -1,5 +1,6 @@
 package comp90018.fitness.ui.exercise;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -14,6 +15,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -29,40 +31,35 @@ import comp90018.fitness.R;
 
 public class SecondActivity_exercise extends AppCompatActivity{
 
-    TextView stepDetect;
-    TextView distance;
-    TextView odistance;
-    TextView calorie;
-    Pedometer pedometer;
+    private TextView stepDetect;
+    private TextView distance;
+    private TextView odistance;
+    private TextView calorie;
+    private Pedometer pedometer;
 
     private String gender;
     private Double height;
     private Double weight;
-    private String id = "mingtiand";
-    ThirdActivity_info info;
 
-    Chronometer chronometer;
+    private Chronometer chronometer;
     private long time;
     private long startTime;
 
-    Double runTime;
-    int mStepDetect;
-    double miDistance;
-    double moDistance;
-    double cal;
-
-
-
-
+    private Double runTime;
+    private int mStepDetect;
+    private double miDistance;
+    private double moDistance;
+    private double cal = 0;
+    private String UID;
     private String TAG = "Second Exercise";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
+        Intent intent = getIntent();
+        UID = intent.getStringExtra("UID");
         initData();
-        info = new ThirdActivity_info();
-        weight = info.weight;
         stepDetect = findViewById(R.id.pedometer_stepDetect);
         distance = findViewById(R.id.pedometer_distance);
         odistance = findViewById(R.id.pedometer_gps);
@@ -71,41 +68,43 @@ public class SecondActivity_exercise extends AppCompatActivity{
         chronometer.setBase(SystemClock.elapsedRealtime());
         startTime = SystemClock.elapsedRealtime();
         pedometer = new Pedometer(this);
-
         EventBus.getDefault().register(this);
 
     }
 
+    // Initial data from firestore
     private void initData(){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collection("user_test")
+        db.collection("users").document(UID)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                if(String.valueOf(document.getData().get("id")).equals(id)) {
+                            DocumentSnapshot document = task.getResult();
+                            if(document.exists()) {
 
+                                height = Double.valueOf(document.getData().get("height").toString());
+                                weight = Double.valueOf(document.getData().get("weight").toString());
+                                gender = String.valueOf(document.getData().get("gender"));
 
-                                    height = Double.valueOf(document.getData().get("height").toString());
-                                    weight = Double.valueOf(document.getData().get("weight").toString());
-                                    gender = String.valueOf(document.getData().get("gender"));
-
-                                }
 
                             }
+                            else{
+                                Log.d("error",String.valueOf(document));
+                            }
+
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
-
                         }
-
                     }
                 });
 
+
     }
 
+    // Timer
     @Override
     protected void onPause() {
         time  = SystemClock.elapsedRealtime() - chronometer.getBase();//退出程序加载的时间等于第二次进入程序的时间减去退出时的时间
@@ -116,7 +115,6 @@ public class SecondActivity_exercise extends AppCompatActivity{
     @Override
     protected void onResume() {
         chronometer.setBase(SystemClock.elapsedRealtime() - time);
-
         chronometer.start();
         super.onResume();
     }
@@ -125,19 +123,18 @@ public class SecondActivity_exercise extends AppCompatActivity{
     public void onMessageEventServer(PedometerMessage event) {
         runTime = (double)(SystemClock.elapsedRealtime() - startTime); //unit:ms
         mStepDetect = event.getStepDetect();
-        mStepDetect = 10;
         miDistance = getStepDistance(gender,height)*mStepDetect;
         moDistance = event.getOutDistance();
         cal = getCal(weight,runTime,miDistance, moDistance);
 
         stepDetect.setText(String.valueOf(mStepDetect));
-        distance.setText(String.valueOf(miDistance) + "m");
+        distance.setText(String.format("%.2f",miDistance) + "m");
         odistance.setText(String.format("%.2f",moDistance) + "m");
         calorie.setText(String.format("%.2f",cal) + "kcal");
 
-       // calorie.setText(String.valueOf(height.toString().trim()));
     }
 
+    // Calorie algorithm
     public double getCal(Double weight, Double time, Double miDistance, Double moDistance) {
         double cal;
         double runDistance;
@@ -159,6 +156,7 @@ public class SecondActivity_exercise extends AppCompatActivity{
 
     }
 
+    // Step distance based on gender and height
     public static Double getStepDistance(String gender, Double height){
         Double stepDistance = 0.0;
         if(gender.equals("MALE")){
@@ -170,17 +168,18 @@ public class SecondActivity_exercise extends AppCompatActivity{
         return stepDistance;
     }
 
+    // Once finish exercising, save data
     @Override
     public void onBackPressed() {
         addData();
-
         super.onBackPressed();
     }
 
+    // record exercise in firestore
     private void addData(){
         double velocity = miDistance/runTime;
         Map<String, Object> data = new HashMap<>();
-        data.put("id", id);
+        data.put("id", UID);
         data.put("step", String.valueOf(mStepDetect));
         data.put("time", String.valueOf(runTime));
         data.put("indoor Distance", String.valueOf(miDistance));
@@ -189,7 +188,7 @@ public class SecondActivity_exercise extends AppCompatActivity{
         data.put("velocity", String.valueOf(velocity));
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("exercise_test")
+        db.collection("exercise")
                 .add(data)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
