@@ -17,8 +17,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -159,7 +157,7 @@ public class SecondActivity_exercise extends AppCompatActivity{
     // Step distance based on gender and height
     public static Double getStepDistance(String gender, Double height){
         Double stepDistance = 0.0;
-        if(gender.equals("MALE")){
+        if(gender != null && gender.length() > 0 && gender.equals("MALE")){
             stepDistance = 0.415*height;
         }
         else{

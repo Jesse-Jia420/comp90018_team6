@@ -1,6 +1,6 @@
 package comp90018.fitness.ui.exercise;
 
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,11 +18,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import comp90018.fitness.R;
-import android.content.Intent;
 
 public class ThirdActivity_info extends AppCompatActivity implements View.OnClickListener{
     private TextView info_gender;
@@ -76,9 +73,13 @@ public class ThirdActivity_info extends AppCompatActivity implements View.OnClic
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
                         }
-                        info_gender.setText(gender);
-                        info_height.setText(height.toString() + "m");
-                        info_weight.setText(weight.toString() + "kg");
+                        try {
+                            info_gender.setText(gender);
+                            info_height.setText(height.toString() + "m");
+                            info_weight.setText(weight.toString() + "kg");
+                        } catch (Exception e) {
+                            Log.d(TAG, "Please enter valid information!");
+                        }
                     }
                 });
 
@@ -102,12 +103,17 @@ public class ThirdActivity_info extends AppCompatActivity implements View.OnClic
     public void onClick(View view){
         switch (view.getId()){
             case R.id.button_info:
-                gender = edit_gender.getText().toString();
-                height = Double.valueOf(edit_height.getText().toString());
-                weight = Double.valueOf(edit_weight.getText().toString());
-                info_gender.setText(gender);
-                info_height.setText(height.toString().trim() + "m");
-                info_weight.setText(weight.toString().trim() + "kg");
+                try {
+                    gender = edit_gender.getText().toString();
+                    height = Double.valueOf(edit_height.getText().toString());
+                    weight = Double.valueOf(edit_weight.getText().toString());
+                    info_gender.setText(gender);
+                    info_height.setText(height.toString().trim() + "m");
+                    info_weight.setText(weight.toString().trim() + "kg");
+                } catch (Exception e){
+                    Log.d(TAG, "Please enter valid information!");
+            }
+
 
         }
 
