@@ -24,19 +24,17 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import comp90018.fitness.R;
-
+import android.content.SharedPreferences;
 
 public class MainActivity_pedometer extends Fragment {
-    TextView stepCount;
+    private TextView stepCount;
+    private Pedometer pedometer;
+    private FirebaseFirestore db;
 
-    Pedometer pedometer;
-
-    FirebaseFirestore db;
-
-
-    private String TAG = "First Demo";
+    private String TAG = "Exercise Home";
     public static String MESSAGE = "Message";
     public static int MESSAGE_RECEIVE = 1;
+    public String UID;
 
     @Nullable
     @Override
@@ -44,38 +42,46 @@ public class MainActivity_pedometer extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.activity_home, container, false);
-    }
 
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         super.onCreate(savedInstanceState);
 
-        stepCount = view.findViewById(R.id.pedometer_stepCount);
+        SharedPreferences prefs = getActivity().getSharedPreferences("MyPrefs", getActivity().MODE_PRIVATE);
+        UID = prefs.getString("UID", "none"); // get user ID
+        Log.d(TAG, "onViewCreated: " + UID);
 
+        stepCount = view.findViewById(R.id.pedometer_stepCount);
 
         pedometer = new Pedometer(view.getContext());
         EventBus.getDefault().register(this);
 
         Button exercise_button = view.findViewById(R.id.exercise_button);
         Button exercise_button1 = view.findViewById(R.id.exercise_button1);
+        // Start exercise activity
         exercise_button.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
                         Intent intent = new Intent(view.getContext(), SecondActivity_exercise.class);
+                        intent.putExtra("UID",UID); // Pass UID value to the second activity
                         startActivity(intent);
 
                     }
                 });
+
+        // Start personal information activity
         exercise_button1.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
                         Intent intent = new Intent(view.getContext(), ThirdActivity_info.class);
+                        intent.putExtra("UID",UID); // Pass UID value to the third activity
                         startActivity(intent);
 
                     }
@@ -83,7 +89,11 @@ public class MainActivity_pedometer extends Fragment {
         initData();
     }
 
+    public String getUID(){
+        return UID;
+    }
 
+    // initial database, modification avalible
     private void initData(){
         db = FirebaseFirestore.getInstance();
 
@@ -108,8 +118,7 @@ public class MainActivity_pedometer extends Fragment {
 
     }
 
-
-
+    // Step Counter Sensor working
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(PedometerMessage event) {
         if (stepCount != null) {

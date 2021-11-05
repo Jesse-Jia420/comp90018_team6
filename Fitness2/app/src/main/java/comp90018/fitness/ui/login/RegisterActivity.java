@@ -68,14 +68,14 @@ public class RegisterActivity extends AppCompatActivity {
         RegisterBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                PerforAuth();
+                PerformAuth();
             }
         });
 
 
     }
 
-    private void PerforAuth() {
+    private void PerformAuth() {
         String email = inputEmail.getText().toString();
         String password = inputPassword.getText().toString();
         String confirmPassword =inputConfirmPassword.getText().toString();
@@ -97,9 +97,7 @@ public class RegisterActivity extends AppCompatActivity {
                     if(task.isSuccessful()){
                         FirebaseFirestore db = FirebaseFirestore.getInstance();
                         Map<String, Object> user = new HashMap<>();
-//                        Map<String, Object> friend = new HashMap<>();
                         ArrayList<Map<String, Object>> friends = new ArrayList<>();
-//                        friends.add(friend);
                         user.put("friends", friends);
                         user.put("name", inputFullName.getText().toString());
                         user.put("gender", inputGender.getText().toString());

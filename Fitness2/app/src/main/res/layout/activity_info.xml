@@ -65,7 +65,7 @@
             android:id="@+id/edit_gender"
             android:layout_width="250dp"
             android:layout_height="50dp"
-            android:hint="please enter your gender(MALE/FEMALE)"
+            android:hint="your gender(MALE/FEMALE)"
             android:inputType="text" />
     </LinearLayout>
     <LinearLayout
@@ -90,7 +90,7 @@
             android:id="@+id/edit_height"
             android:layout_width="250dp"
             android:layout_height="50dp"
-            android:hint="please enter your height(m)"
+            android:hint="your height(m)"
             android:inputType="text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.901"
@@ -114,7 +114,7 @@
             android:id="@+id/edit_weight"
             android:layout_width="250dp"
             android:layout_height="50dp"
-            android:hint="please enter your weight(kg)"
+            android:hint="your weight(kg)"
             android:inputType="text" />
     </LinearLayout>
 

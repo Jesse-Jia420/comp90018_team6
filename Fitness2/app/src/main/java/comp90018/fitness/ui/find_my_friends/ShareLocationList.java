@@ -29,13 +29,14 @@ import java.util.Map;
 
 import comp90018.fitness.R;
 
+/**
+ * A class for defining the location sharing friend list
+ */
 public class ShareLocationList extends ArrayAdapter {
     private ArrayList<String> names;
     private ArrayList<Integer> imageId;
     private Activity context;
-//    private ArrayList<Map<String, Object>> friends = new ArrayList<>();
     private String TAG = this.getClass().getSimpleName();
-//    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public ShareLocationList(Activity context, ArrayList<String> names, ArrayList<Integer> imageId) {
         super(context, R.layout.share_location_list_row_item, names);
@@ -55,23 +56,6 @@ public class ShareLocationList extends ArrayAdapter {
         ImageView avatar = (ImageView) row.findViewById(R.id.find_friends_bottom_sheet_avatar);
         Button button = (Button) row.findViewById(R.id.shareLocationBtn);
 
-//        DocumentReference docRef = db.collection("users").document("Rve0AFkG4XjQtGhJmQkV");
-//        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable DocumentSnapshot snapshot,
-//                                @Nullable FirebaseFirestoreException e) {
-//                if (e != null) {
-//                    Log.w(TAG, "Listen failed.", e);
-//                    return;
-//                }
-//
-//                if (snapshot != null && snapshot.exists()) {
-//                    Log.d(TAG, "Current data: " + snapshot.getData().get("friends"));
-//                    friends = (ArrayList<Map<String, Object>>) snapshot.getData().get("friends");
-//                 }
-//            }
-//        });
-
         name.setText(names.get(position));
         avatar.setImageResource(imageId.get(position));
         if (FindFriendsFragment.friends.get(position).get("locationShared") != null &&
@@ -82,6 +66,8 @@ public class ShareLocationList extends ArrayAdapter {
                 !(Boolean) FindFriendsFragment.friends.get(position).get("locationShared")){
             button.setText("Share");
         }
+
+        // listen to any changes on the share button and update when it is clicked
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

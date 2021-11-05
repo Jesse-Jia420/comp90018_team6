@@ -56,10 +56,6 @@ public class loginFrame extends Fragment {
         inputPassword = view.findViewById(R.id.password);
         fAuth = FirebaseAuth.getInstance();
         myUser =fAuth.getCurrentUser();
-        SharedPreferences prefs = getContext().getSharedPreferences("MyPrefs", getContext().MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("UID", fAuth.getUid());
-        editor.apply();
         progressDialog = new ProgressDialog(view.getContext());
         LoginBtn =view.findViewById(R.id.loginBtn);
 
@@ -107,6 +103,13 @@ public class loginFrame extends Fragment {
     }
 
     private void sendUserToNextActivity() {
+
+        // save user id into shared preferences
+        SharedPreferences prefs = getContext().getSharedPreferences("MyPrefs", getContext().MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("UID", fAuth.getUid());
+        editor.commit();
+
         Intent intent= new Intent(g_view.getContext(), loginActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);

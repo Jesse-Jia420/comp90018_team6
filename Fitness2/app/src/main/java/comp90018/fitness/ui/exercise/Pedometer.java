@@ -37,10 +37,6 @@ public class Pedometer implements SensorEventListener {
 
 
     public Pedometer(Context context){
-//        info = new ThirdActivity_info();
-//        gender = info.gender;
-//        height = info.height;
-//        weight = info.weight;
 
         mContext = context;
         enableSensor();
@@ -50,17 +46,46 @@ public class Pedometer implements SensorEventListener {
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
         criteria.setPowerRequirement(Criteria.ACCURACY_LOW);
         String provider = locationManager.getBestProvider(criteria, true);
+        // Check permission of GPS
         if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             return;
         }
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            // Last known location
             if (location != null) {
                 longitude = location.getLongitude();
                 latitude = location.getLatitude();
 
             }
+
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 8, new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    // Upgrade location, measure distance
+                    longitude = location.getLongitude();
+                    latitude = location.getLatitude();
+                    if(preLatitude!=0){
+                        float[] results = new float[1];
+                        Location.distanceBetween(preLatitude,preLongitude,latitude,longitude,results);
+                        outdistance = outdistance + results[0];
+                    }
+                    preLatitude = latitude;
+                    preLongitude = longitude;
+                }
+                @Override
+                public void onStatusChanged(String s, int i, Bundle bundle) {
+                }
+                @Override
+                public void onProviderEnabled(String provider) {
+
+                }
+                @Override
+                public void onProviderDisabled(String s) {
+
+                }
+            });
         }
         else {
             LocationListener locationListener = new LocationListener() {
@@ -87,6 +112,7 @@ public class Pedometer implements SensorEventListener {
                     }
                 }
             };
+            // GPS may be provided by network
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, locationListener);
             Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             if (location != null) {
@@ -105,7 +131,7 @@ public class Pedometer implements SensorEventListener {
 
     }
 
-
+    // test location distance algorithm
     public static double getDistatce(double lat1, double lat2, double lon1,    double lon2) {
         double R = 6371;
         double distance = 0.0;
@@ -124,8 +150,6 @@ public class Pedometer implements SensorEventListener {
         int suitable = 0;
         mSensorManager = (SensorManager)mContext.getSystemService(Context.SENSOR_SERVICE);
 
-
-
         List<Sensor> sensorList = mSensorManager.getSensorList(Sensor.TYPE_ALL);
         mSensorManager.registerListener(this,
                 mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR),
@@ -139,7 +163,6 @@ public class Pedometer implements SensorEventListener {
 
     }
 
-
     @Override
     public void onSensorChanged(SensorEvent event) {
         Log.d(TAG,"get step");
@@ -152,15 +175,19 @@ public class Pedometer implements SensorEventListener {
             mStepCounter = (int) event.values[0];
 
         } else if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
+            // test accelerometer
+//            if(event.values[0] > 0.1){
+//                mStepCounter ++;
+//            }
+//            if(event.values[2] > 0.1){
+//                mStepDetector++;
+//            }
             //float distance = (float)Math.sqrt(Math.pow(event.values[0],2) + Math.pow(event.values[1],2) + Math.pow(event.values[2],2));
         }
 
         EventBus.getDefault().post(new PedometerMessage(mStepCounter,mStepDetector,outdistance));
 
     }
-
-
-
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
