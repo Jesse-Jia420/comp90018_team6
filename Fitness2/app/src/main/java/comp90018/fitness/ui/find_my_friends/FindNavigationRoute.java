@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * A class for getting google map navigation route
+ */
 public class FindNavigationRoute extends AsyncTask<String, Void, PolylineOptions> {
 
     private String TAG = "GetPathFromLocation";
@@ -28,6 +31,7 @@ public class FindNavigationRoute extends AsyncTask<String, Void, PolylineOptions
         this.listener = listener;
     }
 
+    // get route data from Google direction API
     public String getUrl(LatLng origin, LatLng dest) {
 
         String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
@@ -40,6 +44,7 @@ public class FindNavigationRoute extends AsyncTask<String, Void, PolylineOptions
         return url;
     }
 
+    // process the json data fetched and extract the route
     @Override
     protected PolylineOptions doInBackground(String... url) {
 
@@ -120,6 +125,7 @@ public class FindNavigationRoute extends AsyncTask<String, Void, PolylineOptions
         }
     }
 
+    // draw the route on the map
     @Override
     protected void onPostExecute(PolylineOptions polylineOptions) {
         super.onPostExecute(polylineOptions);

@@ -12,6 +12,10 @@ import java.util.ArrayList;
 
 import comp90018.fitness.R;
 
+/**
+ * A class for defining the available friend list which contains all the friends who have shared
+ * their locations with the current user
+ */
 public class AvailableFriendList extends ArrayAdapter {
     private ArrayList<String> names;
     private ArrayList<String> distances;

@@ -53,16 +53,12 @@ import java.util.Map;
 
 import comp90018.fitness.R;
 
+/**
+ * A fragment implementing find my friend functionality
+ */
 public class FindFriendsFragment extends Fragment implements OnMapReadyCallback {
 
-    private FusedLocationProviderClient fusedLocationProviderClient;
-    public static Location currentLocation;
-    private GoogleMap map;
     private static final int REQUEST_CODE = 101;
-    private LocationRequest locationRequest;
-    private LocationCallback locationCallback;
-    private Marker marker;
-    private Marker friendMarker;
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static String TAG = FindFriendsFragment.class.getSimpleName();
     private static ArrayList<String> AllNames = new ArrayList<>();
@@ -71,9 +67,16 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
     private static ArrayList<String> distances = new ArrayList<>();
     private static ArrayList<Integer> imageIds = new ArrayList<>();
     public static ArrayList<Map<String, Object>> friends = new ArrayList<>();
+    private FusedLocationProviderClient fusedLocationProviderClient;
+    private GoogleMap map;
+    private LocationRequest locationRequest;
+    private LocationCallback locationCallback;
+    private Marker marker;
+    private Marker friendMarker;
     private AvailableFriendList availableFriendList;
     private Polyline polyline;
     private static String UID;
+    public static Location currentLocation;
 
     @Nullable
     @Override
@@ -81,6 +84,7 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
+        // fetch device's current GPS location
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
         fetchLocation();
         return inflater.inflate(R.layout.fragment_find_friends, container, false);
@@ -89,10 +93,10 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // get the user id of the current user
         SharedPreferences prefs = getActivity().getSharedPreferences("MyPrefs", getActivity().MODE_PRIVATE);
         UID = prefs.getString("UID", "none");
-        Log.d("hello", UID);
-
         if (UID.equals("none")){
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setMessage("You haven't logged in, please log in first.");
@@ -110,19 +114,25 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
             dialog.show();
         }
 
+        // define the locating button
         Button LocateButton = (Button) view.findViewById(R.id.locate);
         LocateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // update location after the button is clicked
                 updateLocation();
+                // update the internal storage of friends data
                 updateFriends();
                 if (availableFriendList != null){
+                    // notify data change for the available friend list
                     availableFriendList.notifyDataSetChanged();
                 }
+                // update the current user's location on their friends' sides
                 updateSharedLocation();
             }
         });
 
+        // define the share location button
         Button shareButton = (Button) view.findViewById(R.id.shareLocation);
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,43 +141,8 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
             }
         });
 
-        // Create a new user with a first and last name
-//        Map<String, Object> user = new HashMap<>();
-//        Map<String, Object> friend1 = new HashMap<>();
-//        Map<String, Object> friend2 = new HashMap<>();
-//        ArrayList<Map<String, Object>> friendsData = new ArrayList<>();
-//        friend1.put("id", "AQHqhY7NNEb7b0KzhxHu");
-//        friend1.put("name", "Bob");
-//        friend1.put("lat", -37.816178);
-//        friend1.put("long", 145.015345);
-//        friend2.put("id", "XxuLTJ6E27szh8pVQ4N0");
-//        friend2.put("name", "Emma");
-//        friend2.put("lat", -37.7571);
-//        friend2.put("long", 145.0307);
-//        friendsData.add(friend1);
-//        friendsData.add(friend2);
-//        user.put("friends", friendsData);
-//
-//        db.collection("users").document(UID).set(user);
-
-        // Add a new document with a generated ID
-//        db.collection("users")
-//                .add(user)
-//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                    @Override
-//                    public void onSuccess(DocumentReference documentReference) {
-//                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.w(TAG, "Error adding document", e);
-//                    }
-//                });
-
+        // To demo this functionality, we generate dummy friends data for the user logged in
         DocumentReference docRef = db.collection("users").document(UID);
-
         Map<String, Object> friend1 = new HashMap<>();
         Map<String, Object> friend2 = new HashMap<>();
         ArrayList<Map<String, Object>> friendsData = new ArrayList<>();
@@ -183,6 +158,7 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
         friendsData.add(friend2);
         docRef.update("friends", friendsData);
 
+        // listen to any changes to my friends' data and update whenever needed
         docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot,
@@ -199,8 +175,6 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
                     ListView l;
                     availableFriendList = new AvailableFriendList(getActivity(), names, distances, imageIds);
                     l = view.findViewById(R.id.availableFriendList);
-//                        ArrayAdapter<String> arr;
-//                        arr = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, names);
                     l.setAdapter(availableFriendList);
                     l.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
@@ -208,6 +182,7 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
                             if (polyline != null) {
                                 polyline.remove();
                             }
+                            // plot the friend's location on the map
                             LatLng latLng = new LatLng((Double) friends.get(position).get("lat"), (Double) friends.get(position).get("long"));
                             LatLng start = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                             if (friendMarker == null) {
@@ -217,6 +192,8 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
                             map.animateCamera(CameraUpdateFactory.newLatLng(latLng));
                             map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
                             friendMarker.setPosition(latLng);
+
+                            // draw the navigation route from my location to the friend's location
                             if (currentLocation != null){
                                 new FindNavigationRoute(start, latLng, new RouteListener() {
                                     @Override
@@ -235,6 +212,7 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
 
     }
 
+    // update the internal storage of my friends' data
     private static void updateFriends(){
         names.clear();
         distances.clear();
@@ -260,7 +238,7 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
         }
     }
 
-
+    // share my location with the friend I selected
     public static void shareLocation(int position){
         DocumentReference docRef = db.collection("users").document((String) friends.get(position).get("id"));
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -288,11 +266,13 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
             }
         });
 
+        // update my record of the friend
         DocumentReference docRef2 = db.collection("users").document(UID);
         friends.get(position).put("locationShared", true);
         docRef2.update("friends", friends);
     }
 
+    // stop sharing location with the friend by removing my GPS location on their side
     public static void stopSharingLocation(int position){
         DocumentReference docRef = db.collection("users").document((String) friends.get(position).get("id"));
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -319,12 +299,14 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
             }
         });
 
+        // update my record of the friend
         DocumentReference docRef2 = db.collection("users").document(UID);
         friends.get(position).put("locationShared", false);
         docRef2.update("friends", friends);
 
     }
 
+    // show the friend list for location sharing
     private void shareLocationDialog(View view) {
 
         final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity());
@@ -338,6 +320,7 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
         bottomSheetDialog.show();
     }
 
+    // update my location on my friends' sides
     private void updateSharedLocation(){
         for (Map<String, Object> friend : friends){
             if (friend.get("locationShared") != null && (Boolean) friend.get("locationShared")){
@@ -369,20 +352,19 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
         }
     }
 
+    // initial fetching of my location
     private void fetchLocation() {
         if (ActivityCompat.checkSelfPermission(
                 getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
                 getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
         }
-//        fusedLocationProviderClient.requestLocationUpdates(null,null);
         Task<Location> task = fusedLocationProviderClient.getLastLocation();
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
                 if (location != null) {
                     currentLocation = location;
-//                    Toast.makeText(getActivity().getApplicationContext(), currentLocation.getLatitude() + "" + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
                     SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
                     assert supportMapFragment != null;
                     supportMapFragment.getMapAsync(FindFriendsFragment.this);
@@ -394,10 +376,9 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.map = googleMap;
-//        updateLocation();
-
     }
 
+    // get my new location and update it on the map
     public void updateLocation(){
         locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -428,6 +409,7 @@ public class FindFriendsFragment extends Fragment implements OnMapReadyCallback 
         marker.setPosition(latLng);
     }
 
+    // request user permission for GPS locating
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

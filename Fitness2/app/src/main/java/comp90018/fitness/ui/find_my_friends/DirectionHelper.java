@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * A class used to help decode the json data fetched from google direction api
+ */
 public class DirectionHelper {
 
     public List<List<HashMap<String, String>>> parse(JSONObject jObject) {

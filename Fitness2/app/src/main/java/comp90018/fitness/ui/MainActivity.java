@@ -1,5 +1,6 @@
 package comp90018.fitness.ui;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
