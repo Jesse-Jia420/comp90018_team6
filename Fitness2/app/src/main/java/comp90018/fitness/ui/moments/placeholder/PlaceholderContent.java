@@ -30,37 +30,6 @@ import comp90018.fitness.ui.moments.MyItemRecyclerViewAdapter;
  * TODO: Replace all uses of this class before publishing your app.
  */
 public class PlaceholderContent implements MyItemRecyclerViewAdapter.ViewHolder.OnItemListener {
-
-//    public static void getFirebaseData() {
-//        ITEMS.clear();
-//        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        db.collection("post_test")
-//                .orderBy("mTime", Query.Direction.DESCENDING)
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    private String TAG;
-//
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                String distance = calcDistance();
-//                                ArrayList<String> imgList = (ArrayList<String>) document.get("mImageUrl");
-//                                String imgUrlTemp = "";
-//                                if (imgList.size() != 0) {
-//                                    imgUrlTemp = imgList.get(0).toString();
-//                                }
-//                                PlaceholderItem tempItem = new PlaceholderItem(document.getId(), document.get("mContent").toString(), document.get("mTitle").toString(), imgUrlTemp, document.get("mTime").toString(), document.get("mAuthorName").toString(), document.get("mAuthorAvatarUrl").toString(), distance, imgList);
-//                                addItem(tempItem);
-//                            }
-//                        } else {
-//                            Log.w(TAG, "Error getting documents.", task.getException());
-//                        }
-//                    }
-//                });
-//    }
-
-
     /**
      * An array of sample (placeholder) items.
      */
@@ -76,15 +45,6 @@ public class PlaceholderContent implements MyItemRecyclerViewAdapter.ViewHolder.
         ITEM_MAP.put(item.id, item);
     }
 
-
-    private static String makeDetails(int position) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Details about Item: ").append(position);
-        for (int i = 0; i < position; i++) {
-            builder.append("\nMore details information here.");
-        }
-        return builder.toString();
-    }
 
     @Override
     public void onItemClick(int position) {

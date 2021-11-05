@@ -99,17 +99,13 @@ public class MomentDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_moment_details);
-
         initView();
-        Log.d(TAG,"onCreate: called.");
-//        TextView userName = (TextView)findViewById(R.id.textView2);
+        //get post information from ItemFragment
         Bundle bundle = getIntent().getExtras();
         if(bundle.getParcelable("some_content") != null)
         {
-            //TODO here get the string stored in the string variable and do
-            // setText() on userName
+            //display post information
             PlaceholderContent.PlaceholderItem item = bundle.getParcelable("some_content");
-//            userName.setText(item.content);
             imgUrlList = item.imgList;
             mTitle.setText(item.title);
             mContent.setText(item.content);
@@ -125,14 +121,13 @@ public class MomentDetailsActivity extends AppCompatActivity {
 
         }
         if(! bundle.getString("UID").equals("none")){
+            //get user information to leave a comment
             USER_ID = bundle.getString("UID");
-
             final FirebaseFirestore db= FirebaseFirestore.getInstance();
             AddMomentActivity that;
             DocumentReference docRef = db.collection("users").document(USER_ID);
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 private static final String TAG = "";
-
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
@@ -153,7 +148,6 @@ public class MomentDetailsActivity extends AppCompatActivity {
             Toast.makeText(MomentDetailsActivity.this, "You need to login first!", Toast.LENGTH_SHORT).show();
             this.finish();
         }
-
         mLoopPagerAdapter.setData(imgUrlList);
         mLoopPagerAdapter.notifyDataSetChanged();
     }
@@ -162,6 +156,7 @@ public class MomentDetailsActivity extends AppCompatActivity {
         String postId = id;
         ArrayList<CommentsItem> commentList = new ArrayList<CommentsItem>();
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        //find all comments of current post from firebase
         db.collection("comment_test")
                 .orderBy("time", Query.Direction.DESCENDING)
                 .get()
@@ -223,7 +218,7 @@ public class MomentDetailsActivity extends AppCompatActivity {
         mAddCommentEdit.setText("");
         mAddCommentEdit.clearFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        // 隐藏软键盘
+        // hide keyboard
         imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
         getComments(POST_ID);
 
@@ -254,7 +249,6 @@ public class MomentDetailsActivity extends AppCompatActivity {
         }
 
         public CommentsItem(String content, String post_id, String user_id, String user_name, String user_avatar){
-//            this.id = id;
             this.content = content;
             this.time = getTime();
             this.postId = post_id;
@@ -267,11 +261,12 @@ public class MomentDetailsActivity extends AppCompatActivity {
             return new CommentsItem[i];
         }
 
+        //get current time and format it
         private String getTime() {
-            SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
-            sdf.applyPattern("yyyy-MM-dd HH:mm:ss a");// a为am/pm的标记
-            Date date = new Date();// 获取当前时间
-            System.out.println("Current Time：" + sdf.format(date)); // 输出已经格式化的现在时间（24小时制）
+            SimpleDateFormat sdf = new SimpleDateFormat();
+            sdf.applyPattern("yyyy-MM-dd HH:mm:ss a");
+            Date date = new Date();
+            System.out.println("Current Time：" + sdf.format(date));
             return sdf.format(date);
         }
 

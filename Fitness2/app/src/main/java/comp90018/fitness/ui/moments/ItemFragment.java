@@ -65,13 +65,6 @@ public class ItemFragment extends Fragment implements MyItemRecyclerViewAdapter.
     private double LONGITUDE = 0;
     private double EARTH_R = 6378100;
 
-    public double getLATITUDE(){
-        return this.LATITUDE;
-    }
-    public double getLONGITUDE(){
-        return this.LONGITUDE;
-    }
-
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -144,7 +137,7 @@ public class ItemFragment extends Fragment implements MyItemRecyclerViewAdapter.
                     // Add onclick function to add moment button
                     Intent intent = new Intent(ItemFragment.this.getActivity(), AddMomentActivity.class);
                     intent.putExtra("UID", UID);
-                    //启动
+                    //start 'add moment' activity
                     startActivity(intent);
                 }
             });
@@ -180,24 +173,19 @@ public class ItemFragment extends Fragment implements MyItemRecyclerViewAdapter.
                             MyItemRecyclerViewAdapter mAdapter;
                             mAdapter = new MyItemRecyclerViewAdapter(PlaceholderContent.ITEMS, getContext(), ItemFragment.this);
                             recyclerView.setAdapter(mAdapter);
-
                         }
                     });
 
         }
-
-
         return view;
     }
 
 
     public String calcDistance(double lati, double longi){
-
         double lat1 = lati  * Math.PI / 180;
         double lat2 = LATITUDE  * Math.PI / 180;
         double lng1 = longi  * Math.PI / 180;
         double lng2 = LONGITUDE  * Math.PI / 180;
-
         double cos = Math.cos(lat2) * Math.cos(lat1) * Math.cos(lng2 -lng1) + Math.sin(lat1) * Math.sin(lat2);
         return Math.round(EARTH_R * Math.acos(cos)/1000) + " km";
     }
@@ -217,13 +205,6 @@ public class ItemFragment extends Fragment implements MyItemRecyclerViewAdapter.
 
     public void getUserPosition() {
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
             return;
         }
@@ -237,8 +218,6 @@ public class ItemFragment extends Fragment implements MyItemRecyclerViewAdapter.
                             LONGITUDE = location.getLongitude();
                         }
                     }
-
                 });
     }
-
 }

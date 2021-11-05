@@ -102,7 +102,7 @@ public class AddMomentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_moment);
 
-        //跳转相机动态权限
+        //Access authority of camera
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
             StrictMode.setVmPolicy(builder.build());
@@ -113,6 +113,7 @@ public class AddMomentActivity extends AppCompatActivity {
         mButtonSubmit = findViewById(R.id.button_submit);
         mProgressBar = findViewById(R.id.progress_bar);
 
+        //set default state of submit button
         mButtonSubmit.setEnabled(false);
         mButtonSubmit.setTextColor(0xFFFFFFFF);
 
@@ -157,11 +158,11 @@ public class AddMomentActivity extends AppCompatActivity {
 
     private void getUserInfo() {
         String USER_ID = "";
+        //get user id from ItemFragment. if user id is absent, end this activity.
         Bundle bundle = getIntent().getExtras();
         if(! bundle.getString("UID").equals("none"))
         {
-            //TODO here get the string stored in the string variable and do
-            // setText() on userName
+            //get user information by user id from firebase
             USER_ID = bundle.getString("UID");
             mAuthorId = USER_ID;
 
@@ -210,13 +211,6 @@ public class AddMomentActivity extends AppCompatActivity {
 
     private void getUserPosition() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             ActivityCompat.requestPermissions(AddMomentActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
             return;
         }
@@ -232,7 +226,7 @@ public class AddMomentActivity extends AppCompatActivity {
                             mLatitude = location.getLatitude();
                             mLongitude = location.getLongitude();
 
-//                            //translate geo point into meaningful location
+//                            //translate geo point into meaningful location, can't work currently.
 //                            Geocoder geocoder = new Geocoder(AddMomentActivity.this);
 //                            try {
 //                                List<Address> mAddresses = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),3);
@@ -266,21 +260,18 @@ public class AddMomentActivity extends AppCompatActivity {
     public int verifyPermissions(Activity activity, java.lang.String permission) {
         int Permission = ActivityCompat.checkSelfPermission(activity, permission);
         if (Permission == PackageManager.PERMISSION_GRANTED) {
-            Log.i(TAG, "已经同意权限");
+            Log.i(TAG, "have authority");
             return 1;
         } else {
-            Log.i(TAG, "没有同意权限");
+            Log.i(TAG, "do not have authority");
             return 0;
         }
     }
     private void openCamera(){
         if (verifyPermissions(AddMomentActivity.this, PERMISSIONS_STORAGE[2]) == 0) {
-            Log.i(TAG, "提示是否要授权");
             ActivityCompat.requestPermissions(AddMomentActivity.this, PERMISSIONS_STORAGE, 3);
         } else {
-            //已经有权限
-            //创建File对象，用于存储拍照后的图片
-//        File outputImage = new File(getExternalCacheDir(), "outputImage.jpg");
+            //already have authority
             File outputImage = new File(getExternalCacheDir(), System.currentTimeMillis() + ".jpg");
             if (outputImage.exists()) {
                 outputImage.delete();
@@ -291,14 +282,14 @@ public class AddMomentActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-            //判断SDK版本高低，ImageUri方法不同
+            //use different method to get ImageUri depend on version of SDK
             if (Build.VERSION.SDK_INT >= 24) {
                 ImageUri = FileProvider.getUriForFile(AddMomentActivity.this, BuildConfig.APPLICATION_ID + ".provider", outputImage);
             } else {
                 ImageUri = Uri.fromFile(outputImage);
             }
 
-            //启动相机程序
+            //start camera application
             Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
             intent.putExtra(MediaStore.EXTRA_OUTPUT, ImageUri);
             startActivityForResult(intent, TAKE_PHOTO);
@@ -312,8 +303,8 @@ public class AddMomentActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if((requestCode == TAKE_PHOTO || requestCode == RESULT_LOAD_IMAGE) && resultCode == RESULT_OK){
-//            mImageUriList.clear();
             imgUrlList.clear();
+            //make image upload list, add new imageview and give it a sign
             if(requestCode == TAKE_PHOTO){
                 ImageView iv = new ImageView(getApplicationContext());
                 iv.setId(currentImgIndex);
@@ -346,7 +337,7 @@ public class AddMomentActivity extends AppCompatActivity {
                     ivList.add(iv);
                 }
             }
-
+            //display images
             for(int i=0; i<mImageUriList.size(); i++){
                 Glide.with(this)
                         .load(mImageUriList.get(i))
@@ -356,7 +347,7 @@ public class AddMomentActivity extends AppCompatActivity {
             }
 
 
-            //adjust constraint layout
+            //adjust constraint layout, rearrange images
             constraintLayout = (ConstraintLayout) findViewById(R.id.upload_img_list);
             constraintSet = new ConstraintSet();
             constraintSet.clone(constraintLayout);
